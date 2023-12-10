@@ -14,6 +14,7 @@ import java.util.List;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class User {
     @Id
+    private String userId;
     private String nicPassport;
     private String firstName;
     private String lastName;
@@ -21,4 +22,8 @@ public class User {
     private String email;
     private String mobile;
     private List<Address> addresses;
+
+    public String getUserId() {
+        return userId;
+    }
 }
