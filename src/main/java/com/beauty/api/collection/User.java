@@ -22,8 +22,4 @@ public class User {
     private String email;
     private String mobile;
     private List<Address> addresses;
-
-    public String getUserId() {
-        return userId;
-    }
 }
