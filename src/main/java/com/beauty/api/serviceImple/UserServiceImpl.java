@@ -6,6 +6,7 @@ import com.beauty.api.repository.UserGroupRepository;
 import com.beauty.api.repository.UserRepository;
 import com.beauty.api.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -20,8 +21,17 @@ public class UserServiceImpl implements UserService {
     @Autowired
     private UserGroupRepository userGroupRepository;
 
+//    private final BCryptPasswordEncoder passwordEncoder;
+//
+//    public UserServiceImpl(BCryptPasswordEncoder passwordEncoder) {
+//        this.passwordEncoder = passwordEncoder;
+//    }
+
     @Override
     public String save(User user) {
+//        String encryptedPassword = passwordEncoder.encode(user.getPassword());
+//        user.setPassword(encryptedPassword);
+
         return userRepository.save(user).getUserName();
     }
 
