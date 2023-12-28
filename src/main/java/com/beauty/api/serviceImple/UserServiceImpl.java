@@ -29,10 +29,10 @@ public class UserServiceImpl implements UserService {
     public List<User> getAllUsers() {
         List<User> users = userRepository.findAll();
 
-        users.forEach(user -> {
-            UserGroup userGroup = userGroupRepository.findById(user.getUserGroup().get_id()).orElse(null);
-            user.setUserGroup(userGroup);
-        });
+//        users.forEach(user -> {
+//            UserGroup userGroup = userGroupRepository.findById(user.getUserGroup().get_id()).orElse(null);
+//            user.setUserGroup(userGroup);
+//        });
 
         return users;
     }
@@ -133,21 +133,21 @@ public class UserServiceImpl implements UserService {
             }
 
             // Update the embedded UserGroup
-            if (user.getUserGroup() != null) {
-                UserGroup newUserGroup = user.getUserGroup();
-
-                UserGroup existingUserGroupData = userGroupRepository.findById(newUserGroup.get_id()).orElse(null);
-
-                if (existingUserGroupData != null) {
-                    existingUserData.setUserGroup(UserGroup.builder()
-                            ._id(newUserGroup.get_id())
-                            .name(newUserGroup.getName())
-                            .permission(newUserGroup.getPermission())
-                            .build());
-                } else {
-                    return null;
-                }
-            }
+//            if (user.getUserGroup() != null) {
+//                UserGroup newUserGroup = user.getUserGroup();
+//
+//                UserGroup existingUserGroupData = userGroupRepository.findById(newUserGroup.get_id()).orElse(null);
+//
+//                if (existingUserGroupData != null) {
+//                    existingUserData.setUserGroup(UserGroup.builder()
+//                            ._id(newUserGroup.get_id())
+//                            .name(newUserGroup.getName())
+//                            .permission(newUserGroup.getPermission())
+//                            .build());
+//                } else {
+//                    return null;
+//                }
+//            }
 
             User updatedUserData = userRepository.save(existingUserData);
             return updatedUserData;

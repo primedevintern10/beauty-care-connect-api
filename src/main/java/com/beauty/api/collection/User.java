@@ -23,6 +23,6 @@ public class User {
     private String password;
 
     // UserGroup is embedded here
-    @DBRef
-    private UserGroup userGroup;
+//    @DBRef
+//    private UserGroup userGroup;
 }
