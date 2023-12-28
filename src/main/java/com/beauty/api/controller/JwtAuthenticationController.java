@@ -19,15 +19,13 @@ import org.springframework.web.bind.annotation.RestController;
 @AllArgsConstructor
 public class JwtAuthenticationController {
 
-    private UserDetailsService userDetailsService;
-
+    private UserDetailsService userDetailsService; // Inject UserDetailsService instead of InMemoryUserDetailsManager
     private AuthenticationManager manager;
-
     private JwtHelper helper;
 
     @PostMapping("/authenticate")
-    public ResponseEntity<JwtResponse> login(@RequestBody JwtRequest request){
-        //authenticate
+    public ResponseEntity<JwtResponse> login(@RequestBody JwtRequest request) {
+        // authenticate
         this.doAuthenticate(request.getUsername(), request.getPassword());
 
         UserDetails userDetails = userDetailsService.loadUserByUsername(request.getUsername());
@@ -46,6 +44,5 @@ public class JwtAuthenticationController {
         } catch (BadCredentialsException e) {
             throw new BadCredentialsException("Credentials Invalid !!");
         }
-
     }
 }

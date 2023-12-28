@@ -2,8 +2,7 @@ package com.beauty.api.collection;
 
 import lombok.*;
 
-@Getter
-@Setter
+@Data
 @AllArgsConstructor
 @NoArgsConstructor
 @ToString

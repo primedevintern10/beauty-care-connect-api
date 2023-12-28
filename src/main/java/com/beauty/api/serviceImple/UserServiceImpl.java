@@ -15,34 +15,33 @@ import java.util.Optional;
 @Service
 public class UserServiceImpl implements UserService {
 
-    @Autowired
     private UserRepository userRepository;
+    private UserGroupRepository userGroupRepository;
+    private final BCryptPasswordEncoder passwordEncoder;
 
     @Autowired
-    private UserGroupRepository userGroupRepository;
-
-//    private final BCryptPasswordEncoder passwordEncoder;
-//
-//    public UserServiceImpl(BCryptPasswordEncoder passwordEncoder) {
-//        this.passwordEncoder = passwordEncoder;
-//    }
+    public UserServiceImpl(UserRepository userRepository, UserGroupRepository userGroupRepository, BCryptPasswordEncoder passwordEncoder) {
+        this.userRepository = userRepository;
+        this.userGroupRepository = userGroupRepository;
+        this.passwordEncoder = passwordEncoder;
+    }
 
     @Override
     public String save(User user) {
-//        String encryptedPassword = passwordEncoder.encode(user.getPassword());
-//        user.setPassword(encryptedPassword);
+        String encryptedPassword = passwordEncoder.encode(user.getPassword());
+        user.setPassword(encryptedPassword);
 
-        return userRepository.save(user).getUserName();
+        return userRepository.save(user).getUsername();
     }
 
     @Override
     public List<User> getAllUsers() {
         List<User> users = userRepository.findAll();
 
-        users.forEach(user -> {
-            UserGroup userGroup = userGroupRepository.findById(user.getUserGroup().get_id()).orElse(null);
-            user.setUserGroup(userGroup);
-        });
+//        users.forEach(user -> {
+//            UserGroup userGroup = userGroupRepository.findById(user.getUserGroup().get_id()).orElse(null);
+//            user.setUserGroup(userGroup);
+//        });
 
         return users;
     }
@@ -118,8 +117,8 @@ public class UserServiceImpl implements UserService {
         if (optionalExistingUserData.isPresent()) {
             User existingUserData = optionalExistingUserData.get();
 
-            if (user.getUserName() != null) {
-                existingUserData.setUserName(user.getUserName());
+            if (user.getUsername() != null) {
+                existingUserData.setUsername(user.getUsername());
             }
 
             if (user.getNicPassport() != null) {
@@ -143,27 +142,32 @@ public class UserServiceImpl implements UserService {
             }
 
             // Update the embedded UserGroup
-            if (user.getUserGroup() != null) {
-                UserGroup newUserGroup = user.getUserGroup();
-
-                UserGroup existingUserGroupData = userGroupRepository.findById(newUserGroup.get_id()).orElse(null);
-
-                if (existingUserGroupData != null) {
-                    existingUserData.setUserGroup(UserGroup.builder()
-                            ._id(newUserGroup.get_id())
-                            .name(newUserGroup.getName())
-                            .permission(newUserGroup.getPermission())
-                            .build());
-                } else {
-                    return null;
-                }
-            }
+//            if (user.getUserGroup() != null) {
+//                UserGroup newUserGroup = user.getUserGroup();
+//
+//                UserGroup existingUserGroupData = userGroupRepository.findById(newUserGroup.get_id()).orElse(null);
+//
+//                if (existingUserGroupData != null) {
+//                    existingUserData.setUserGroup(UserGroup.builder()
+//                            ._id(newUserGroup.get_id())
+//                            .name(newUserGroup.getName())
+//                            .permission(newUserGroup.getPermission())
+//                            .build());
+//                } else {
+//                    return null;
+//                }
+//            }
 
             User updatedUserData = userRepository.save(existingUserData);
             return updatedUserData;
         } else {
             return null;
         }
+    }
+
+    @Override
+    public Optional<User> getUserByUsername(String username) {
+        return userRepository.findByUsername(username);
     }
 
 }
