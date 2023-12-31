@@ -4,19 +4,20 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.Builder;
 import lombok.Data;
 import org.springframework.data.annotation.Id;
-import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 @Data
 @Builder
-@Document(collection = "Service")
+@Document(collection = "Employee")
 @JsonInclude(JsonInclude.Include.NON_NULL)
-public class Service {
+public class Employee {
     @Id
     private String _id;
+    private String nic;
     private String name;
-    private String requiredTime;
+    private String nickName;
+    private String email;
+    private String contactNo;
     private Boolean isEnabled;
-    @DBRef
-    private ServiceCategory serviceCategory;
+    private String type;
 }
