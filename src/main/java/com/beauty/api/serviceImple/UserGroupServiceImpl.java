@@ -14,7 +14,6 @@ public class UserGroupServiceImpl implements UserGroupService{
     @Autowired
     private UserGroupRepository userGroupRepository;
 
-
     @Override
     public String save(UserGroup userGroup) {
         return userGroupRepository.save(userGroup).getName();
