@@ -1,0 +1,56 @@
+package com.beauty.api.serviceImple;
+
+import com.beauty.api.collection.Company;
+import com.beauty.api.repository.CompanyRepository;
+import com.beauty.api.service.CompanyService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import java.util.List;
+import java.util.Optional;
+
+@Service
+public class CompanyServiceImpl implements CompanyService {
+    @Autowired
+    private CompanyRepository companyRepository;
+
+    @Override
+    public String save(Company company) {
+        return companyRepository.save(company).getName();
+    }
+
+    @Override
+    public List<Company> getAllCompanies() {
+        return companyRepository.findAll();
+    }
+
+    @Override
+    public Optional<Company> getCompanyById(String companyId) {
+        return companyRepository.findById(companyId);
+    }
+
+    @Override
+    public void delete(String companyId) {
+        companyRepository.deleteById(companyId);
+    }
+
+    @Override
+    public Company update(Company company, String companyId) {
+        Company existingCompanyData = companyRepository.findById(companyId).orElse(null);
+
+        if (existingCompanyData != null) {
+            existingCompanyData.setName(company.getName());
+            existingCompanyData.setRegistrationNo(company.getRegistrationNo());
+            existingCompanyData.setOwner(company.getOwner());
+            existingCompanyData.setEmail(company.getEmail());
+            existingCompanyData.setWebUrl(company.getWebUrl());
+            existingCompanyData.setCountry(company.getCountry());
+            existingCompanyData.setCurrency(company.getCurrency());
+            existingCompanyData.setBranches(company.getBranches());
+
+            return companyRepository.save(existingCompanyData);
+        } else {
+            return null;
+        }
+    }
+}
