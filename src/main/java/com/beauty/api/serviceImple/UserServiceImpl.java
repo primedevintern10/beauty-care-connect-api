@@ -36,14 +36,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public List<User> getAllUsers() {
-        List<User> users = userRepository.findAll();
-
-//        users.forEach(user -> {
-//            UserGroup userGroup = userGroupRepository.findById(user.getUserGroup().get_id()).orElse(null);
-//            user.setUserGroup(userGroup);
-//        });
-
-        return users;
+        return userRepository.findAll();
     }
 
     @Override
@@ -112,34 +105,34 @@ public class UserServiceImpl implements UserService {
 //            return null;
 //        }
 
-        Optional<User> optionalExistingUserData = userRepository.findById(userId);
-
-        if (optionalExistingUserData.isPresent()) {
-            User existingUserData = optionalExistingUserData.get();
-
-            if (user.getUsername() != null) {
-                existingUserData.setUsername(user.getUsername());
-            }
-
-            if (user.getNicPassport() != null) {
-                existingUserData.setNicPassport(user.getNicPassport());
-            }
-
-            if (user.getFirstName() != null) {
-                existingUserData.setFirstName(user.getFirstName());
-            }
-
-            if (user.getLastName() != null) {
-                existingUserData.setLastName(user.getLastName());
-            }
-
-            if (user.getEmail() != null) {
-                existingUserData.setEmail(user.getEmail());
-            }
-
-            if (user.getContactNo() != null) {
-                existingUserData.setContactNo(user.getContactNo());
-            }
+//        Optional<User> optionalExistingUserData = userRepository.findById(userId);
+//
+//        if (optionalExistingUserData.isPresent()) {
+//            User existingUserData = optionalExistingUserData.get();
+//
+//            if (user.getUserName() != null) {
+//                existingUserData.setUserName(user.getUserName());
+//            }
+//
+//            if (user.getNicPassport() != null) {
+//                existingUserData.setNicPassport(user.getNicPassport());
+//            }
+//
+//            if (user.getFirstName() != null) {
+//                existingUserData.setFirstName(user.getFirstName());
+//            }
+//
+//            if (user.getLastName() != null) {
+//                existingUserData.setLastName(user.getLastName());
+//            }
+//
+//            if (user.getEmail() != null) {
+//                existingUserData.setEmail(user.getEmail());
+//            }
+//
+//            if (user.getContactNo() != null) {
+//                existingUserData.setContactNo(user.getContactNo());
+//            }
 
             // Update the embedded UserGroup
 //            if (user.getUserGroup() != null) {
@@ -158,8 +151,25 @@ public class UserServiceImpl implements UserService {
 //                }
 //            }
 
-            User updatedUserData = userRepository.save(existingUserData);
-            return updatedUserData;
+//            User updatedUserData = userRepository.save(existingUserData);
+//            return updatedUserData;
+//        } else {
+//            return null;
+//        }
+
+        User existingUserData = userRepository.findById(userId).orElse(null);
+
+        if (existingUserData != null) {
+            existingUserData.setFirstName(user.getFirstName());
+            existingUserData.setLastName(user.getLastName());
+            existingUserData.setUsername(user.getUsername());
+            existingUserData.setNicPassport(user.getNicPassport());
+            existingUserData.setEmail(user.getEmail());
+            existingUserData.setContactNo(user.getContactNo());
+            existingUserData.setPassword(user.getPassword());
+            existingUserData.setUserGroup(user.getUserGroup());
+
+            return userRepository.save(existingUserData);
         } else {
             return null;
         }
@@ -169,5 +179,5 @@ public class UserServiceImpl implements UserService {
     public Optional<User> getUserByUsername(String username) {
         return userRepository.findByUsername(username);
     }
-
+    
 }

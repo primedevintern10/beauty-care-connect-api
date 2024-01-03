@@ -1,6 +1,5 @@
 package com.beauty.api.collection;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.Builder;
 import lombok.Data;
@@ -9,21 +8,21 @@ import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
 
+import java.util.List;
+
 @Data
 @Builder
-@Document(collection = "User")
+@Document(collection = "Branch")
 @JsonInclude(JsonInclude.Include.NON_NULL)
-public class User {
+public class Branch {
     @Id
     private String _id;
-    private String firstName;
-    private String lastName;
-    private String username;
-    private String nicPassport;
-    private String email;
+    private String name;
     private String contactNo;
-    @JsonIgnore
-    private String password;
+    private Address address;
+    private String email;
     @DBRef
-    private UserGroup userGroup;
+    private List<Service> services;
+    @DBRef
+    private List<Employee> employees;
 }

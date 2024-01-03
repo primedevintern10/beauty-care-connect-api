@@ -6,15 +6,12 @@ import lombok.Data;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
-import java.util.List;
-
 @Data
 @Builder
-@Document(collection = "UserGroup")
+@Document(collection = "ServiceCategory")
 @JsonInclude(JsonInclude.Include.NON_NULL)
-public class UserGroup {
+public class ServiceCategory {
     @Id
     private String _id;
     private String name;
-    private List<String> permission;
 }

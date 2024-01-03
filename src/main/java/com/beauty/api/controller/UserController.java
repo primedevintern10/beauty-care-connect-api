@@ -11,12 +11,11 @@ import java.util.Optional;
 @RestController
 @RequestMapping("/user")
 public class UserController {
-
     @Autowired
     private UserService userService;
 
     @PostMapping
-    public String save(@RequestBody User user){
+    public String save(@RequestBody User user) {
         return userService.save(user);
     }
 
@@ -26,18 +25,17 @@ public class UserController {
     }
 
     @GetMapping("/{id}")
-    public Optional<User> getUserById(@PathVariable("id")String userId) {
+    public Optional<User> getUserById(@PathVariable("id") String userId) {
         return userService.getUserById(userId);
     }
 
     @PutMapping("/{id}")
-    public User update(@PathVariable("id")String userId, @RequestBody User user){
+    public User update(@PathVariable("id") String userId, @RequestBody User user) {
         return userService.update(user, userId);
     }
 
     @DeleteMapping("/{id}")
-    public String delete(@PathVariable("id")String userId)
-    {
+    public String delete(@PathVariable("id") String userId) {
         userService.delete(userId);
         return "Deleted Successfully";
     }
