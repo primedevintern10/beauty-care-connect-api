@@ -1,4 +1,4 @@
-package com.beauty.api.collection;
+package com.beauty.api.models;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.Builder;

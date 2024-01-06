@@ -1,5 +1,6 @@
 package com.beauty.api.collection;
 
+import com.beauty.api.models.Address;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.Builder;
 import lombok.Data;

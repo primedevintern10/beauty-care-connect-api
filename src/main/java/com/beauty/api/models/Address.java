@@ -1,4 +1,4 @@
-package com.beauty.api.collection;
+package com.beauty.api.models;
 
 import lombok.Builder;
 import lombok.Data;
