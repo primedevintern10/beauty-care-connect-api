@@ -5,6 +5,8 @@ import com.beauty.api.models.JwtRequest;
 import com.beauty.api.models.JwtResponse;
 import com.beauty.api.security.JwtHelper;
 import com.beauty.api.service.UserService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,6 +21,7 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/auth")
+@Tag(name = "Authentication")
 public class AuthController {
     @Autowired
     private AuthenticationManager manager;
@@ -34,6 +37,7 @@ public class AuthController {
 
     private Logger logger = LoggerFactory.getLogger(AuthController.class);
 
+    @Operation(summary = "Log In/ Sign In")
     @PostMapping("/login")
     public ResponseEntity<JwtResponse> login(@RequestBody JwtRequest request) {
         this.doAuthenticate(request.getUsername(), request.getPassword());
@@ -62,6 +66,7 @@ public class AuthController {
         return "Invalid Credentials.";
     }
 
+    @Operation(summary = "Register/ Sign Un")
     @PostMapping("/register")
     public String createUser(@RequestBody User user){
         return userService.save(user);

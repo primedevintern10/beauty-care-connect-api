@@ -25,7 +25,6 @@ public class User implements UserDetails {
     private String nicPassport;
     private String email;
     private String contactNo;
-    @JsonIgnore
     private String password;
     @DBRef
     private UserGroup userGroup;
