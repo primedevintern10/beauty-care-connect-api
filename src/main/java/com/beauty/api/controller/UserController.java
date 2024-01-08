@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.security.Principal;
+import java.security.Principal;
 import java.util.List;
 import java.util.Optional;
 
@@ -23,6 +24,11 @@ public class UserController {
     @GetMapping("/{id}")
     public Optional<User> getUserById(@PathVariable("id") String userId) {
         return userService.getUserById(userId);
+    }
+
+    @GetMapping("/current-user")
+    public String getLoggedInUser(Principal principal) {
+        return principal.getName();
     }
 
     @GetMapping("/current-user")

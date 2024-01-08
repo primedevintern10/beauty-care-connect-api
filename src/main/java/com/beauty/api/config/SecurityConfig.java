@@ -17,6 +17,16 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 @Configuration
 @AllArgsConstructor
 public class SecurityConfig {
+    public static final String[] PUBLIC_URLS = {
+            "/auth/**",
+            "/v3/api-docs",
+            "/v3/api-docs/**",
+            "/swagger-resources/**",
+            "/swagger-ui/**",
+            "/swagger-ui.html",
+            "/webjars/**"
+    };
+
     @Autowired
     private JwtAuthenticationEntryPoint point;
 
@@ -35,19 +45,15 @@ public class SecurityConfig {
         http.csrf(csrf -> csrf.disable())
                 .cors(cors -> cors.disable())
                 .authorizeHttpRequests(
-                        auth ->
-                                auth.requestMatchers("/home/**")
-                                        .authenticated()
-                                        .requestMatchers("/auth/login")
-                                        .permitAll()
-                                        .requestMatchers("/auth/register")
-                                        .permitAll()
-                                        .anyRequest()
-                                        .authenticated())
+                        auth -> auth.requestMatchers("/home")
+                                .authenticated()
+                                .requestMatchers(PUBLIC_URLS)
+                                .permitAll()
+                                .anyRequest()
+                                .authenticated())
                 .exceptionHandling(e -> e.authenticationEntryPoint(point))
                 .sessionManagement(
-                        session ->
-                                session.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
+                        session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
 
         http.addFilterBefore(filter, UsernamePasswordAuthenticationFilter.class);
 
