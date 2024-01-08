@@ -31,11 +31,6 @@ public class UserController {
         return principal.getName();
     }
 
-    @GetMapping("/current-user")
-    public String getLoggedInUser(Principal principal) {
-        return principal.getName();
-    }
-
     @PutMapping("/{id}")
     public User update(@PathVariable("id") String userId, @RequestBody User user) {
         return userService.update(user, userId);
