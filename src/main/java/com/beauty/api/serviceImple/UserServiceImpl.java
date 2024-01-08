@@ -68,18 +68,4 @@ public class UserServiceImpl implements UserService, UserDetailsService {
         return userRepository.findByUsername(username).orElseThrow(() -> new RuntimeException("User "+username+" not found."));
     }
 
-    @Override
-    public List<User> getAllUsers() {
-        return userRepository.findAll();
-    }
-
-    @Override
-    public Optional<User> getUserById(String userId) {
-        return userRepository.findById(userId);
-    }
-
-    @Override
-    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        return userRepository.findByUsername(username).orElseThrow(() -> new RuntimeException("User "+username+" not found."));
-    }
 }
