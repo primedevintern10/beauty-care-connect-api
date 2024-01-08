@@ -8,12 +8,17 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
 
 @Service
+public class UserServiceImpl implements UserService, UserDetailsService {
 public class UserServiceImpl implements UserService, UserDetailsService {
 
     @Autowired
@@ -22,8 +27,12 @@ public class UserServiceImpl implements UserService, UserDetailsService {
     @Autowired
     private PasswordEncoder passwordEncoder;
 
+    @Autowired
+    private PasswordEncoder passwordEncoder;
+
     @Override
     public String save(User user) {
+        user.setPassword(passwordEncoder.encode(user.getPassword()));
         user.setPassword(passwordEncoder.encode(user.getPassword()));
         return userRepository.save(user).get_id();
     }
@@ -41,9 +50,11 @@ public class UserServiceImpl implements UserService, UserDetailsService {
             existingUserData.setFirstName(user.getFirstName());
             existingUserData.setLastName(user.getLastName());
 //            existingUserData.setUsername(user.getUsername());
+//            existingUserData.setUsername(user.getUsername());
             existingUserData.setNicPassport(user.getNicPassport());
             existingUserData.setEmail(user.getEmail());
             existingUserData.setContactNo(user.getContactNo());
+//            existingUserData.setPassword(user.getPassword());
 //            existingUserData.setPassword(user.getPassword());
             existingUserData.setUserGroup(user.getUserGroup());
 
