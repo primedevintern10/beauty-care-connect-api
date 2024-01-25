@@ -68,4 +68,11 @@ public class UserServiceImpl implements UserService, UserDetailsService {
         return userRepository.findByUsername(username).orElseThrow(() -> new RuntimeException("User "+username+" not found."));
     }
 
+    @Override
+    public String getUserIdByUsername(String username) {
+        return userRepository.findByUsername(username)
+                .map(User::get_id)
+                .orElse(null);
+    }
+
 }
