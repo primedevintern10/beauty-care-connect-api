@@ -12,8 +12,9 @@ public interface UserService {
 
     Optional<User> getUserById(String userId);
 
+    String getUserIdByUsername(String username);
+
     void delete(String userId);
 
     User update(User user, String userId);
-
 }
