@@ -46,7 +46,7 @@ public class CompanyServiceImpl implements CompanyService {
             existingCompanyData.setWebUrl(company.getWebUrl());
             existingCompanyData.setCountry(company.getCountry());
             existingCompanyData.setCurrency(company.getCurrency());
-            existingCompanyData.setBranches(company.getBranches());
+//            existingCompanyData.setBranches(company.getBranches());
 
             return companyRepository.save(existingCompanyData);
         } else {
