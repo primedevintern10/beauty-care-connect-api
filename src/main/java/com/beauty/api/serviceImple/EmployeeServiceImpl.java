@@ -45,6 +45,7 @@ public class EmployeeServiceImpl implements EmployeeService {
             existingEmployeeData.setContactNo(employee.getContactNo());
             existingEmployeeData.setIsEnabled(employee.getIsEnabled());
             existingEmployeeData.setType(employee.getType());
+            existingEmployeeData.setBranch(employee.getBranch());
 
             return employeeRepository.save(existingEmployeeData);
         } else {
