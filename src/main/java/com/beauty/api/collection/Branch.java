@@ -21,8 +21,11 @@ public class Branch {
     private String contactNo;
     private Address address;
     private String email;
+
     @DBRef
-    private List<Service> services;
-    @DBRef
-    private List<Employee> employees;
+    private Company company;
+//    @DBRef
+//    private List<Service> services;
+//    @DBRef
+//    private List<Employee> employees;
 }

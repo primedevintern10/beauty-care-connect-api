@@ -23,6 +23,6 @@ public class Company {
     private String webUrl;
     private String country;
     private String currency;
-    @DBRef
-    private List<Branch> Branches;
+//    @DBRef
+//    private List<Branch> Branches;
 }

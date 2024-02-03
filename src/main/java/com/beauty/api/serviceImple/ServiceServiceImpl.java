@@ -42,6 +42,8 @@ public class ServiceServiceImpl implements ServiceService {
             existingServiceData.setRequiredTime(service.getRequiredTime());
             existingServiceData.setIsEnabled(service.getIsEnabled());
             existingServiceData.setServiceCategory(service.getServiceCategory());
+            existingServiceData.setBranch(service.getBranch());
+//            existingServiceData.setCompany(service.getCompany());
 
             return serviceRepository.save(existingServiceData);
         } else {

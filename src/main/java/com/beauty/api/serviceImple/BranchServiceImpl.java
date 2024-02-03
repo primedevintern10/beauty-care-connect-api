@@ -43,8 +43,9 @@ public class BranchServiceImpl implements BranchService {
             existingBranchData.setContactNo(branch.getContactNo());
             existingBranchData.setAddress(branch.getAddress());
             existingBranchData.setEmail(branch.getEmail());
-            existingBranchData.setServices(branch.getServices());
-            existingBranchData.setEmployees(branch.getEmployees());
+            existingBranchData.setCompany(branch.getCompany());
+//            existingBranchData.setServices(branch.getServices());
+//            existingBranchData.setEmployees(branch.getEmployees());
 
             return branchRepository.save(existingBranchData);
         } else {
