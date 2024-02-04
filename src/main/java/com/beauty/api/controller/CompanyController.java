@@ -19,7 +19,7 @@ public class CompanyController {
 
     @Operation(summary = "Create a Company")
     @PostMapping
-    public String save(@RequestBody Company company) {
+    public Company save(@RequestBody Company company) {
         return companyService.save(company);
     }
 
