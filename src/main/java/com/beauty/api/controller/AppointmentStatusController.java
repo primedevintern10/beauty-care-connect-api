@@ -5,6 +5,8 @@ import com.beauty.api.service.AppointmentStatusService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -19,8 +21,9 @@ public class AppointmentStatusController {
 
     @Operation(summary = "Create Appointment Status")
     @PostMapping
-    public String save(@RequestBody AppointmentStatus appointmentStatus) {
-        return appointmentStatusService.save(appointmentStatus);
+    public ResponseEntity<AppointmentStatus> save(@RequestBody AppointmentStatus appointmentStatus) {
+        AppointmentStatus savedStatus = appointmentStatusService.save(appointmentStatus);
+        return new ResponseEntity<>(savedStatus, HttpStatus.CREATED);
     }
 
     @Operation(summary = "Get All Appointment Statuses")
@@ -31,8 +34,10 @@ public class AppointmentStatusController {
 
     @Operation(summary = "Get Appointment Status by ID")
     @GetMapping("/{id}")
-    public Optional<AppointmentStatus> getAppointmentStatusById(@PathVariable("id") String appointmentStatusId) {
-        return appointmentStatusService.getAppointmentStatusById(appointmentStatusId);
+    public ResponseEntity<AppointmentStatus> getAppointmentStatusById(@PathVariable("id") String appointmentStatusId) {
+        Optional<AppointmentStatus> appointmentStatus = appointmentStatusService.getAppointmentStatusById(appointmentStatusId);
+        return appointmentStatus.map(value -> new ResponseEntity<>(value, HttpStatus.OK))
+                .orElseGet(() -> new ResponseEntity<>(HttpStatus.NOT_FOUND));
     }
 
     @Operation(summary = "Update Appointment Status")
@@ -43,8 +48,17 @@ public class AppointmentStatusController {
 
     @Operation(summary = "Remove Appointment Status")
     @DeleteMapping("/{id}")
-    public String delete(@PathVariable("id") String appointmentStatusId) {
-        appointmentStatusService.delete(appointmentStatusId);
-        return "Deleted Successfully";
+    public ResponseEntity<String> delete(@PathVariable("id") String appointmentStatusId) {
+        boolean isDeleted = appointmentStatusService.delete(appointmentStatusId);
+        if (isDeleted) {
+            return new ResponseEntity<>("Appointment Status deleted successfully", HttpStatus.NO_CONTENT);
+        } else {
+            return new ResponseEntity<>("Appointment Status not found", HttpStatus.NOT_FOUND);
+        }
+    }
+
+    @ExceptionHandler(Exception.class)
+    public ResponseEntity<String> handleException(Exception e) {
+        return new ResponseEntity<>("An error occurred: " + e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
     }
 }

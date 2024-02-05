@@ -15,8 +15,8 @@ public class UserGroupServiceImpl implements UserGroupService{
     private UserGroupRepository userGroupRepository;
 
     @Override
-    public String save(UserGroup userGroup) {
-        return userGroupRepository.save(userGroup).getName();
+    public UserGroup save(UserGroup userGroup) {
+        return userGroupRepository.save(userGroup);
     }
 
     @Override
@@ -30,8 +30,9 @@ public class UserGroupServiceImpl implements UserGroupService{
     }
 
     @Override
-    public void delete(String userGroupId) {
+    public boolean delete(String userGroupId) {
         userGroupRepository.deleteById(userGroupId);
+        return false;
     }
 
     @Override

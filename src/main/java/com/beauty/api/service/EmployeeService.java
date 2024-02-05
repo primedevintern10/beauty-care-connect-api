@@ -6,13 +6,13 @@ import java.util.List;
 import java.util.Optional;
 
 public interface EmployeeService {
-    String save(Employee employee);
+    Employee save(Employee employee);
 
     List<Employee> getAllEmployees();
 
     Optional<Employee> getEmployeeById(String employeeId);
 
-    void delete(String employeeId);
+    boolean delete(String employeeId);
 
-    Employee update(Employee employee, String employeeId);
+    Optional<Employee> update(Employee employee, String employeeId);
 }

@@ -14,7 +14,7 @@ public interface UserService {
 
     String getUserIdByUsername(String username);
 
-    void delete(String userId);
+    boolean delete(String userId);
 
     User update(User user, String userId);
 }

@@ -64,14 +64,14 @@ public class AuthController {
         }
     }
 
-    @ExceptionHandler(BadCredentialsException.class)
-    public String exceptionHandler() {
-        return "Invalid Credentials.";
-    }
-
     @Operation(summary = "Register/Sign Up")
     @PostMapping("/register")
     public String createUser(@RequestBody User user){
         return userService.save(user);
+    }
+
+    @ExceptionHandler(BadCredentialsException.class)
+    public ResponseEntity<String> handleBadCredentialsException(BadCredentialsException e) {
+        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid Credentials.");
     }
 }

@@ -10,46 +10,62 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Map;
-import java.util.NoSuchElementException;
 import java.util.Optional;
+import java.util.NoSuchElementException;
 
 @RestController
 @RequestMapping("/branch")
 @Tag(name = "Branches")
 public class BranchController {
+
     @Autowired
     private BranchService branchService;
 
     @Operation(summary = "Create a Branch")
     @PostMapping
-    public Branch save(@RequestBody Branch branch) {
-        return branchService.save(branch);
+    public ResponseEntity<Branch> save(@RequestBody Branch branch) {
+        Branch savedBranch = branchService.save(branch);
+        return new ResponseEntity<>(savedBranch, HttpStatus.CREATED);
     }
 
     @Operation(summary = "Get All Branches")
     @GetMapping
-    public List<Branch> getAllBranches() {
-        return branchService.getAllBranches();
+    public ResponseEntity<List<Branch>> getAllBranches() {
+        List<Branch> branches = branchService.getAllBranches();
+        return new ResponseEntity<>(branches, HttpStatus.OK);
     }
 
     @Operation(summary = "Get Branch by ID")
     @GetMapping("/{id}")
-    public Optional<Branch> getBranchById(@PathVariable("id") String branchId) {
-        return branchService.getBranchById(branchId);
+    public ResponseEntity<Branch> getBranchById(@PathVariable("id") String branchId) {
+        try {
+            Branch branch = branchService.getBranchById(branchId).orElseThrow();
+            return new ResponseEntity<>(branch, HttpStatus.OK);
+        } catch (NoSuchElementException e) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
     }
 
     @Operation(summary = "Update a Branch")
     @PutMapping("/{id}")
-    public Branch update(@PathVariable("id") String branchId, @RequestBody Branch branch) {
-        return branchService.update(branch, branchId);
+    public ResponseEntity<Branch> update(@PathVariable("id") String branchId, @RequestBody Branch branch) {
+        Branch updatedBranch = branchService.update(branch, branchId);
+        if (updatedBranch != null) {
+            return ResponseEntity.ok(updatedBranch);
+        } else {
+            return ResponseEntity.notFound().build();
+        }
     }
 
     @Operation(summary = "Remove a Branch")
     @DeleteMapping("/{id}")
     public ResponseEntity<String> delete(@PathVariable("id") String branchId) {
-        branchService.delete(branchId);
-        return new ResponseEntity<>("Deleted Successfully", HttpStatus.NO_CONTENT);
+        boolean isDeleted = branchService.delete(branchId);
+        if (isDeleted) {
+            return ResponseEntity.ok("Deleted Successfully");
+        } else {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Branch not found");
+        }
     }
 
     @Operation(summary = "Filter Branches by Company Id")
@@ -59,7 +75,7 @@ public class BranchController {
         return new ResponseEntity<>(branches, HttpStatus.OK);
     }
 
-    @ExceptionHandler({ NoSuchElementException.class })
+    @ExceptionHandler({NoSuchElementException.class})
     public ResponseEntity<String> handleNoSuchElementException(NoSuchElementException e) {
         return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND);
     }

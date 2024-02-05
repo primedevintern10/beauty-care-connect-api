@@ -15,8 +15,8 @@ public class AppointmentServiceImpl implements AppointmentService {
     private AppointmentRepository appointmentRepository;
 
     @Override
-    public String save(Appointment appointment) {
-        return appointmentRepository.save(appointment).get_id();
+    public Appointment save(Appointment appointment) {
+        return appointmentRepository.save(appointment);
     }
 
     @Override
@@ -30,8 +30,9 @@ public class AppointmentServiceImpl implements AppointmentService {
     }
 
     @Override
-    public void delete(String appointmentId) {
+    public boolean delete(String appointmentId) {
         appointmentRepository.deleteById(appointmentId);
+        return false;
     }
 
     @Override

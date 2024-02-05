@@ -12,7 +12,7 @@ public interface BranchService {
 
     Optional<Branch> getBranchById(String branchId);
 
-    void delete(String branchId);
+    boolean delete(String branchId);
 
     Branch update(Branch branch, String branchId);
 

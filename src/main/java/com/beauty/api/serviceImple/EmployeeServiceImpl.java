@@ -15,8 +15,8 @@ public class EmployeeServiceImpl implements EmployeeService {
     private EmployeeRepository employeeRepository;
 
     @Override
-    public String save(Employee employee) {
-        return employeeRepository.save(employee).getName(); // Modify as needed
+    public Employee save(Employee employee) {
+        return employeeRepository.save(employee);
     }
 
     @Override
@@ -30,12 +30,13 @@ public class EmployeeServiceImpl implements EmployeeService {
     }
 
     @Override
-    public void delete(String employeeId) {
+    public boolean delete(String employeeId) {
         employeeRepository.deleteById(employeeId);
+        return false;
     }
 
     @Override
-    public Employee update(Employee employee, String employeeId) {
+    public Optional<Employee> update(Employee employee, String employeeId) {
         Employee existingEmployeeData = employeeRepository.findById(employeeId).orElse(null);
 
         if (existingEmployeeData != null) {
@@ -47,9 +48,9 @@ public class EmployeeServiceImpl implements EmployeeService {
             existingEmployeeData.setType(employee.getType());
             existingEmployeeData.setBranch(employee.getBranch());
 
-            return employeeRepository.save(existingEmployeeData);
+            return Optional.of(employeeRepository.save(existingEmployeeData));
         } else {
-            return null;
+            return Optional.empty();
         }
     }
 }

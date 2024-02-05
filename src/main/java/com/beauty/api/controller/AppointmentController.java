@@ -5,6 +5,8 @@ import com.beauty.api.service.AppointmentService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -14,37 +16,49 @@ import java.util.Optional;
 @RequestMapping("/appointment")
 @Tag(name = "Appointments")
 public class AppointmentController {
+
     @Autowired
     private AppointmentService appointmentService;
 
     @Operation(summary = "Create an Appointment")
     @PostMapping
-    public String save(@RequestBody Appointment appointment) {
-        return appointmentService.save(appointment);
+    public ResponseEntity<Appointment> save(@RequestBody Appointment appointment) {
+        Appointment savedAppointment = appointmentService.save(appointment);
+        return new ResponseEntity<>(savedAppointment, HttpStatus.CREATED);
     }
 
     @Operation(summary = "Get All Appointments")
     @GetMapping
-    public List<Appointment> getAllAppointments() {
-        return appointmentService.getAllAppointments();
+    public ResponseEntity<List<Appointment>> getAllAppointments() {
+        List<Appointment> appointments = appointmentService.getAllAppointments();
+        return ResponseEntity.ok(appointments);
     }
 
     @Operation(summary = "Get Appointment by ID")
     @GetMapping("/{id}")
-    public Optional<Appointment> getAppointmentById(@PathVariable("id") String appointmentId) {
-        return appointmentService.getAppointmentById(appointmentId);
+    public ResponseEntity<Appointment> getAppointmentById(@PathVariable("id") String appointmentId) {
+        Optional<Appointment> appointment = appointmentService.getAppointmentById(appointmentId);
+        return appointment.map(value -> ResponseEntity.ok(value))
+                .orElseGet(() -> ResponseEntity.notFound().build());
     }
 
     @Operation(summary = "Update an Appointment")
     @PutMapping("/{id}")
-    public Appointment update(@PathVariable("id") String appointmentId, @RequestBody Appointment appointment) {
-        return appointmentService.update(appointment, appointmentId);
+    public ResponseEntity<Appointment> update(@PathVariable("id") String appointmentId, @RequestBody Appointment appointment) {
+        Appointment updatedAppointment = appointmentService.update(appointment, appointmentId);
+        return (updatedAppointment != null) ?
+                ResponseEntity.ok(updatedAppointment) :
+                ResponseEntity.notFound().build();
     }
 
     @Operation(summary = "Remove an Appointment")
     @DeleteMapping("/{id}")
-    public String delete(@PathVariable("id") String appointmentId) {
-        appointmentService.delete(appointmentId);
-        return "Deleted Successfully";
+    public ResponseEntity<String> delete(@PathVariable("id") String appointmentId) {
+        boolean isDeleted = appointmentService.delete(appointmentId);
+        if (isDeleted) {
+            return ResponseEntity.ok("Appointment deleted successfully");
+        } else {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Appointment not found");
+        }
     }
 }
