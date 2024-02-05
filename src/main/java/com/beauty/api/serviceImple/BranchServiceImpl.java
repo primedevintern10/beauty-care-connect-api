@@ -52,4 +52,9 @@ public class BranchServiceImpl implements BranchService {
             return null;
         }
     }
+
+    @Override
+    public List<Branch> getBranchesByCompanyId(String companyId) {
+        return branchRepository.findByCompanyId(companyId);
+    }
 }

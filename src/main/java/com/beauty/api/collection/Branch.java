@@ -24,8 +24,4 @@ public class Branch {
 
     @DBRef
     private Company company;
-//    @DBRef
-//    private List<Service> services;
-//    @DBRef
-//    private List<Employee> employees;
 }
