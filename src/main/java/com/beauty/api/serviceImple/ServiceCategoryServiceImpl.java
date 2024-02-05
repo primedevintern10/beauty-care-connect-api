@@ -15,8 +15,8 @@ public class ServiceCategoryServiceImpl implements ServiceCategoryService {
         private ServiceCategoryRepository serviceCategoryRepository;
 
         @Override
-        public String save(ServiceCategory serviceCategory) {
-            return serviceCategoryRepository.save(serviceCategory).getName();
+        public ServiceCategory save(ServiceCategory serviceCategory) {
+            return serviceCategoryRepository.save(serviceCategory);
         }
 
         @Override
@@ -30,8 +30,9 @@ public class ServiceCategoryServiceImpl implements ServiceCategoryService {
         }
 
         @Override
-        public void delete(String serviceCategoryId) {
+        public boolean delete(String serviceCategoryId) {
             serviceCategoryRepository.deleteById(serviceCategoryId);
+            return false;
         }
 
         @Override

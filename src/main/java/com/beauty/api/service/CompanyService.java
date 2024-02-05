@@ -12,7 +12,7 @@ public interface CompanyService {
 
     Optional<Company> getCompanyById(String companyId);
 
-    void delete(String companyId);
+    boolean delete(String companyId);
 
     Company update(Company company, String companyId);
 }

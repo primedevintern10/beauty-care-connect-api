@@ -30,8 +30,9 @@ public class CompanyServiceImpl implements CompanyService {
     }
 
     @Override
-    public void delete(String companyId) {
+    public boolean delete(String companyId) {
         companyRepository.deleteById(companyId);
+        return false;
     }
 
     @Override
@@ -46,7 +47,6 @@ public class CompanyServiceImpl implements CompanyService {
             existingCompanyData.setWebUrl(company.getWebUrl());
             existingCompanyData.setCountry(company.getCountry());
             existingCompanyData.setCurrency(company.getCurrency());
-//            existingCompanyData.setBranches(company.getBranches());
 
             return companyRepository.save(existingCompanyData);
         } else {

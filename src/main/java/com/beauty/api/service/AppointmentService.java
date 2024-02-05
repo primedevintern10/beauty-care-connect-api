@@ -6,13 +6,13 @@ import java.util.List;
 import java.util.Optional;
 
 public interface AppointmentService {
-    String save(Appointment appointment);
+    Appointment save(Appointment appointment);
 
     List<Appointment> getAllAppointments();
 
     Optional<Appointment> getAppointmentById(String appointmentId);
 
-    void delete(String appointmentId);
+    boolean delete(String appointmentId);
 
     Appointment update(Appointment appointment, String appointmentId);
 }

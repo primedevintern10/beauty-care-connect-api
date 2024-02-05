@@ -15,8 +15,8 @@ public class ClientServiceImpl implements ClientService {
     private ClientRepository clientRepository;
 
     @Override
-    public String save(Client client) {
-        return clientRepository.save(client).getFirstName();
+    public Client save(Client client) {
+        return clientRepository.save(client);
     }
 
     @Override
@@ -30,8 +30,9 @@ public class ClientServiceImpl implements ClientService {
     }
 
     @Override
-    public void delete(String clientId) {
+    public boolean delete(String clientId) {
         clientRepository.deleteById(clientId);
+        return false;
     }
 
     @Override

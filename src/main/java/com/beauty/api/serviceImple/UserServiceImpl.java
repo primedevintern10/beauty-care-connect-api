@@ -29,8 +29,9 @@ public class UserServiceImpl implements UserService, UserDetailsService {
     }
 
     @Override
-    public void delete(String userId) {
+    public boolean delete(String userId) {
         userRepository.deleteById(userId);
+        return false;
     }
 
     @Override
@@ -40,11 +41,9 @@ public class UserServiceImpl implements UserService, UserDetailsService {
         if (existingUserData != null) {
             existingUserData.setFirstName(user.getFirstName());
             existingUserData.setLastName(user.getLastName());
-//            existingUserData.setUsername(user.getUsername());
             existingUserData.setNicPassport(user.getNicPassport());
             existingUserData.setEmail(user.getEmail());
             existingUserData.setContactNo(user.getContactNo());
-//            existingUserData.setPassword(user.getPassword());
             existingUserData.setUserGroup(user.getUserGroup());
 
             return userRepository.save(existingUserData);

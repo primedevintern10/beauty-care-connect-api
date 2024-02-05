@@ -30,8 +30,9 @@ public class BranchServiceImpl implements BranchService {
     }
 
     @Override
-    public void delete(String branchId) {
+    public boolean delete(String branchId) {
         branchRepository.deleteById(branchId);
+        return false;
     }
 
     @Override
@@ -44,8 +45,6 @@ public class BranchServiceImpl implements BranchService {
             existingBranchData.setAddress(branch.getAddress());
             existingBranchData.setEmail(branch.getEmail());
             existingBranchData.setCompany(branch.getCompany());
-//            existingBranchData.setServices(branch.getServices());
-//            existingBranchData.setEmployees(branch.getEmployees());
 
             return branchRepository.save(existingBranchData);
         } else {
