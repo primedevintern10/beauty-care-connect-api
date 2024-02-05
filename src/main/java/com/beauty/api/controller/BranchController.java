@@ -5,10 +5,13 @@ import com.beauty.api.service.BranchService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.Map;
+import java.util.NoSuchElementException;
 import java.util.Optional;
 
 @RestController
@@ -44,8 +47,20 @@ public class BranchController {
 
     @Operation(summary = "Remove a Branch")
     @DeleteMapping("/{id}")
-    public String delete(@PathVariable("id") String branchId) {
+    public ResponseEntity<String> delete(@PathVariable("id") String branchId) {
         branchService.delete(branchId);
-        return "Deleted Successfully";
+        return new ResponseEntity<>("Deleted Successfully", HttpStatus.NO_CONTENT);
+    }
+
+    @Operation(summary = "Filter Branches by Company Id")
+    @GetMapping("/by-company/{companyId}")
+    public ResponseEntity<List<Branch>> getBranchesByCompany(@PathVariable String companyId) {
+        List<Branch> branches = branchService.getBranchesByCompanyId(companyId);
+        return new ResponseEntity<>(branches, HttpStatus.OK);
+    }
+
+    @ExceptionHandler({ NoSuchElementException.class })
+    public ResponseEntity<String> handleNoSuchElementException(NoSuchElementException e) {
+        return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND);
     }
 }

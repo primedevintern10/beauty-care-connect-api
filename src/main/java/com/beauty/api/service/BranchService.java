@@ -15,4 +15,6 @@ public interface BranchService {
     void delete(String branchId);
 
     Branch update(Branch branch, String branchId);
+
+    List<Branch> getBranchesByCompanyId(String companyId);
 }
