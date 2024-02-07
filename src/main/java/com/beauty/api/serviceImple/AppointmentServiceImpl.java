@@ -58,4 +58,9 @@ public class AppointmentServiceImpl implements AppointmentService {
             return null;
         }
     }
+
+    @Override
+    public List<Appointment> getAppointmentsByBranchId(String branchId) {
+        return appointmentRepository.findByBranchId(branchId);
+    }
 }
