@@ -61,4 +61,11 @@ public class AppointmentController {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Appointment not found");
         }
     }
+
+    @Operation(summary = "Get Appointments by Branch Id")
+    @GetMapping("/byBranch/{branchId}")
+    public ResponseEntity<List<Appointment>> getAppointmentsByBranchId(@PathVariable String branchId) {
+        List<Appointment> appointments = appointmentService.getAppointmentsByBranchId(branchId);
+        return ResponseEntity.ok(appointments);
+    }
 }

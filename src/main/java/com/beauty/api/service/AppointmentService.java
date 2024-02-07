@@ -15,4 +15,6 @@ public interface AppointmentService {
     boolean delete(String appointmentId);
 
     Appointment update(Appointment appointment, String appointmentId);
+
+    List<Appointment> getAppointmentsByBranchId(String branchId);
 }

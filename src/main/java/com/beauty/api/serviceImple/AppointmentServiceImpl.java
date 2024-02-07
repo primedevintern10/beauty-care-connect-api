@@ -4,6 +4,7 @@ import com.beauty.api.collection.Appointment;
 import com.beauty.api.repository.AppointmentRepository;
 import com.beauty.api.service.AppointmentService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -21,7 +22,7 @@ public class AppointmentServiceImpl implements AppointmentService {
 
     @Override
     public List<Appointment> getAllAppointments() {
-        return appointmentRepository.findAll();
+        return appointmentRepository.findAll(Sort.by(Sort.Direction.ASC, "date"));
     }
 
     @Override
@@ -56,5 +57,10 @@ public class AppointmentServiceImpl implements AppointmentService {
         } else {
             return null;
         }
+    }
+
+    @Override
+    public List<Appointment> getAppointmentsByBranchId(String branchId) {
+        return appointmentRepository.findByBranchId(branchId);
     }
 }
