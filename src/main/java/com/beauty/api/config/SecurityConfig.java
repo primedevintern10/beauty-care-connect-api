@@ -6,6 +6,7 @@ import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
@@ -25,6 +26,11 @@ public class SecurityConfig {
             "/swagger-ui/**",
             "/swagger-ui.html",
             "/webjars/**"
+    };
+
+    public static final String[] PUBLIC_GET_APIS = {
+            "/company/**",
+            "/branch/**"
     };
 
     @Autowired
@@ -47,6 +53,8 @@ public class SecurityConfig {
                         auth -> auth.requestMatchers("/home")
                                 .authenticated()
                                 .requestMatchers(PUBLIC_URLS)
+                                .permitAll()
+                                .requestMatchers(HttpMethod.GET, PUBLIC_GET_APIS)
                                 .permitAll()
                                 .anyRequest()
                                 .authenticated())
