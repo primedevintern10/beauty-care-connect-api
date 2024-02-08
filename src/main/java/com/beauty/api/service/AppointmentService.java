@@ -18,7 +18,7 @@ public interface AppointmentService {
 
     List<Appointment> getAppointmentsByBranchId(String branchId);
 
-    List<Appointment> getAppointmentsByClientAndStatus(String clientId, String statusId);
+    List<Appointment> getAppointmentsByClientAndStatusId(String clientId, String statusId);
 
-    List<Appointment> getAppointmentsByClient(String clientId);
+    List<Appointment> getAppointmentsByClientId(String clientId);
 }

@@ -16,5 +16,5 @@ public interface AppointmentRepository extends MongoRepository<Appointment, Stri
     List<Appointment> findByClientId(String clientId);
 
     @Query("{ 'client._id' : ?0, 'status._id' : ?1 }")
-    List<Appointment> findByClientIdAndStatus_Id(String clientId, String statusId);
+    List<Appointment> findByClientIdAndStatusId(String clientId, String statusId);
 }

@@ -65,12 +65,12 @@ public class AppointmentServiceImpl implements AppointmentService {
     }
 
     @Override
-    public List<Appointment> getAppointmentsByClient(String clientId) {
+    public List<Appointment> getAppointmentsByClientId(String clientId) {
         return appointmentRepository.findByClientId(clientId);
     }
 
     @Override
-    public List<Appointment> getAppointmentsByClientAndStatus(String clientId, String statusId) {
-        return appointmentRepository.findByClientIdAndStatus_Id(clientId, statusId);
+    public List<Appointment> getAppointmentsByClientAndStatusId(String clientId, String statusId) {
+        return appointmentRepository.findByClientIdAndStatusId(clientId, statusId);
     }
 }

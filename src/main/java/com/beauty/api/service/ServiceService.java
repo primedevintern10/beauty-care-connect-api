@@ -15,4 +15,6 @@ public interface ServiceService {
     boolean delete(String serviceId);
 
     Service update(Service service, String serviceId);
+
+    List<Service> getServicesByCategoryId(String categoryId);
 }

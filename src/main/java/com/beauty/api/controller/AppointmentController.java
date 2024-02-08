@@ -72,7 +72,7 @@ public class AppointmentController {
     @Operation(summary = "Get Appointments by Client Id")
     @GetMapping("/client/{clientId}")
     public ResponseEntity<List<Appointment>> getAppointmentsByClient(@PathVariable String clientId) {
-        List<Appointment> appointments = appointmentService.getAppointmentsByClient(clientId);
+        List<Appointment> appointments = appointmentService.getAppointmentsByClientId(clientId);
         return ResponseEntity.ok(appointments);
     }
 
@@ -80,7 +80,7 @@ public class AppointmentController {
     @GetMapping("/client/{clientId}/status/{statusId}")
     public ResponseEntity<List<Appointment>> getAppointmentsByClientAndStatus(
             @PathVariable String clientId, @PathVariable String statusId) {
-        List<Appointment> appointments = appointmentService.getAppointmentsByClientAndStatus(clientId, statusId);
+        List<Appointment> appointments = appointmentService.getAppointmentsByClientAndStatusId(clientId, statusId);
         return ResponseEntity.ok(appointments);
     }
 }

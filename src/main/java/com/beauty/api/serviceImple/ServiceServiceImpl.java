@@ -50,4 +50,10 @@ public class ServiceServiceImpl implements ServiceService {
             return null;
         }
     }
+
+    @Override
+    public List<Service> getServicesByCategoryId(String categoryId) {
+        return serviceRepository.findByCategoryId(categoryId);
+    }
+
 }
