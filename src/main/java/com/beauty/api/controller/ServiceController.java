@@ -33,7 +33,7 @@ public class ServiceController {
         return ResponseEntity.ok(services);
     }
 
-    @Operation(summary = "Get Service by ID")
+    @Operation(summary = "Get Service by Id")
     @GetMapping("/{id}")
     public ResponseEntity<Service> getServiceById(@PathVariable("id") String serviceId) {
         Optional<Service> service = serviceService.getServiceById(serviceId);
@@ -59,5 +59,12 @@ public class ServiceController {
         } else {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Service not found");
         }
+    }
+
+    @Operation(summary = "Get Services by Category Id")
+    @GetMapping("/category/{categoryId}")
+    public ResponseEntity<List<Service>> getServicesByCategory(@PathVariable String categoryId) {
+        List<Service> services = serviceService.getServicesByCategoryId(categoryId);
+        return ResponseEntity.ok(services);
     }
 }

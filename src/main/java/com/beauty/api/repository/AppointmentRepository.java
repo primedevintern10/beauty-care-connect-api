@@ -11,4 +11,10 @@ import java.util.List;
 public interface AppointmentRepository extends MongoRepository<Appointment, String> {
     @Query("{ 'branch._id' : ?0 }")
     List<Appointment> findByBranchId(String branchId);
+
+    @Query("{ 'client._id' : ?0 }")
+    List<Appointment> findByClientId(String clientId);
+
+    @Query("{ 'client._id' : ?0, 'status._id' : ?1 }")
+    List<Appointment> findByClientIdAndStatusId(String clientId, String statusId);
 }
