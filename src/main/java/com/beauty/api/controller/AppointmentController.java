@@ -68,4 +68,19 @@ public class AppointmentController {
         List<Appointment> appointments = appointmentService.getAppointmentsByBranchId(branchId);
         return ResponseEntity.ok(appointments);
     }
+
+    @Operation(summary = "Get Appointments by Client Id")
+    @GetMapping("/client/{clientId}")
+    public ResponseEntity<List<Appointment>> getAppointmentsByClient(@PathVariable String clientId) {
+        List<Appointment> appointments = appointmentService.getAppointmentsByClient(clientId);
+        return ResponseEntity.ok(appointments);
+    }
+
+    @Operation(summary = "Get Appointments by Client Id and Appointment Status Id")
+    @GetMapping("/client/{clientId}/status/{statusId}")
+    public ResponseEntity<List<Appointment>> getAppointmentsByClientAndStatus(
+            @PathVariable String clientId, @PathVariable String statusId) {
+        List<Appointment> appointments = appointmentService.getAppointmentsByClientAndStatus(clientId, statusId);
+        return ResponseEntity.ok(appointments);
+    }
 }

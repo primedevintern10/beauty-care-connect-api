@@ -63,4 +63,14 @@ public class AppointmentServiceImpl implements AppointmentService {
     public List<Appointment> getAppointmentsByBranchId(String branchId) {
         return appointmentRepository.findByBranchId(branchId);
     }
+
+    @Override
+    public List<Appointment> getAppointmentsByClient(String clientId) {
+        return appointmentRepository.findByClientId(clientId);
+    }
+
+    @Override
+    public List<Appointment> getAppointmentsByClientAndStatus(String clientId, String statusId) {
+        return appointmentRepository.findByClientIdAndStatus_Id(clientId, statusId);
+    }
 }
