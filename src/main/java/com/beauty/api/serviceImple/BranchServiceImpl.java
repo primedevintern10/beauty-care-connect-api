@@ -56,4 +56,9 @@ public class BranchServiceImpl implements BranchService {
     public List<Branch> getBranchesByCompanyId(String companyId) {
         return branchRepository.findByCompanyId(companyId);
     }
+
+    @Override
+    public List<Branch> getBranchesByLocation(String location) {
+        return branchRepository.findByLocation(location);
+    }
 }
