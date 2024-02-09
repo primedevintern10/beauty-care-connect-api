@@ -22,6 +22,7 @@ public class Branch {
     private Address address;
     private String email;
     private Integer rating;
+    private Integer completedCount;
     @DBRef
     private Company company;
 }

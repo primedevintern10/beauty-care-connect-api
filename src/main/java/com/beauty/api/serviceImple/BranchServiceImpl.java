@@ -26,7 +26,7 @@ public class BranchServiceImpl implements BranchService {
     @Override
     public List<Branch> getAllBranches() {
         List<Branch> branches = branchRepository.findAll();
-        calculateBranchRatings(branches); // Calculate ratings for each branch
+        calculateBranchRatings(branches);
         return branches;
     }
 
@@ -68,6 +68,12 @@ public class BranchServiceImpl implements BranchService {
             int totalRating = appointmentService.calculateTotalRatingForBranch(branch.get_id());
             int totalAppointments = appointmentService.getTotalCompletedAppointmentsForBranch(branch.get_id());
             branch.setRating(totalAppointments > 0 ? totalRating / totalAppointments : 0);
+            branch.setCompletedCount(totalAppointments);
         }
+    }
+
+    @Override
+    public List<Branch> getBranchesByLocation(String location) {
+        return branchRepository.findByLocation(location);
     }
 }

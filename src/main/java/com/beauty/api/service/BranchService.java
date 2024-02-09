@@ -17,4 +17,6 @@ public interface BranchService {
     Branch update(Branch branch, String branchId);
 
     List<Branch> getBranchesByCompanyId(String companyId);
+
+    List<Branch> getBranchesByLocation(String location);
 }

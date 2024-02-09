@@ -30,7 +30,9 @@ public class SecurityConfig {
 
     public static final String[] PUBLIC_GET_APIS = {
             "/company/**",
-            "/branch/**"
+            "/branch/**",
+            "/service/**",
+            "/serviceCategory/**"
     };
 
     @Autowired
