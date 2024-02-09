@@ -2,6 +2,7 @@ package com.beauty.api.serviceImple;
 
 import com.beauty.api.collection.Branch;
 import com.beauty.api.repository.BranchRepository;
+import com.beauty.api.service.AppointmentService;
 import com.beauty.api.service.BranchService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -14,6 +15,9 @@ public class BranchServiceImpl implements BranchService {
     @Autowired
     private BranchRepository branchRepository;
 
+    @Autowired
+    private AppointmentService appointmentService;
+
     @Override
     public Branch save(Branch branch) {
         return branchRepository.save(branch);
@@ -21,7 +25,9 @@ public class BranchServiceImpl implements BranchService {
 
     @Override
     public List<Branch> getAllBranches() {
-        return branchRepository.findAll();
+        List<Branch> branches = branchRepository.findAll();
+        calculateBranchRatings(branches); // Calculate ratings for each branch
+        return branches;
     }
 
     @Override
@@ -55,5 +61,13 @@ public class BranchServiceImpl implements BranchService {
     @Override
     public List<Branch> getBranchesByCompanyId(String companyId) {
         return branchRepository.findByCompanyId(companyId);
+    }
+
+    private void calculateBranchRatings(List<Branch> branches) {
+        for (Branch branch : branches) {
+            int totalRating = appointmentService.calculateTotalRatingForBranch(branch.get_id());
+            int totalAppointments = appointmentService.getTotalCompletedAppointmentsForBranch(branch.get_id());
+            branch.setRating(totalAppointments > 0 ? totalRating / totalAppointments : 0);
+        }
     }
 }

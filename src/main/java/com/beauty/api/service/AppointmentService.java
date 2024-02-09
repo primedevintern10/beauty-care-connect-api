@@ -21,4 +21,8 @@ public interface AppointmentService {
     List<Appointment> getAppointmentsByClientAndStatusId(String clientId, String statusId);
 
     List<Appointment> getAppointmentsByClientId(String clientId);
+
+    int getTotalCompletedAppointmentsForBranch(String id);
+
+    int calculateTotalRatingForBranch(String id);
 }

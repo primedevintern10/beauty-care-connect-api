@@ -1,6 +1,7 @@
 package com.beauty.api.serviceImple;
 
 import com.beauty.api.collection.Appointment;
+import com.beauty.api.models.Review;
 import com.beauty.api.repository.AppointmentRepository;
 import com.beauty.api.service.AppointmentService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -72,5 +73,19 @@ public class AppointmentServiceImpl implements AppointmentService {
     @Override
     public List<Appointment> getAppointmentsByClientAndStatusId(String clientId, String statusId) {
         return appointmentRepository.findByClientIdAndStatusId(clientId, statusId);
+    }
+
+    @Override
+    public int calculateTotalRatingForBranch(String branchId) {
+        List<Appointment> completedAppointments = appointmentRepository.findByBranchIdAndStatus(branchId, "65917db3c01b79393720710c");
+        return completedAppointments.stream()
+                .mapToInt(appointment -> appointment.getReviews().stream()
+                        .mapToInt(Review::getRating).sum())
+                .sum();
+    }
+
+    @Override
+    public int getTotalCompletedAppointmentsForBranch(String branchId) {
+        return appointmentRepository.countByBranchIdAndStatus(branchId, "65917db3c01b79393720710c");
     }
 }
