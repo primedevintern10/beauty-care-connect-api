@@ -75,6 +75,13 @@ public class BranchController {
         return new ResponseEntity<>(branches, HttpStatus.OK);
     }
 
+    @Operation(summary = "Filter Branches by Location")
+    @GetMapping("/by-location/{location}")
+    public ResponseEntity<List<Branch>> getBranchesByLocation(@PathVariable String location) {
+        List<Branch> branches = branchService.getBranchesByLocation(location);
+        return new ResponseEntity<>(branches, HttpStatus.OK);
+    }
+
     @ExceptionHandler({NoSuchElementException.class})
     public ResponseEntity<String> handleNoSuchElementException(NoSuchElementException e) {
         return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND);
