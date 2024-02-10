@@ -81,6 +81,13 @@ public class BranchController {
         return new ResponseEntity<>(branches, HttpStatus.OK);
     }
 
+    @Operation(summary = "Get Total Branch Count")
+    @GetMapping("/total-count")
+    public ResponseEntity<Long> getTotalBranchCount() {
+        long totalCount = branchService.getTotalBranchCount();
+        return ResponseEntity.ok(totalCount);
+    }
+
     @ExceptionHandler({NoSuchElementException.class})
     public ResponseEntity<String> handleNoSuchElementException(NoSuchElementException e) {
         return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND);

@@ -15,4 +15,6 @@ public interface CompanyService {
     boolean delete(String companyId);
 
     Company update(Company company, String companyId);
+
+    long getTotalCompanyCount();
 }

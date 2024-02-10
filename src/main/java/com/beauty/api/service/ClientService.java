@@ -17,4 +17,6 @@ public interface ClientService {
     Client update(Client client, String clientId);
 
     Optional<Client> getClientByEmail(String email);
+
+    long getTotalClientCount();
 }

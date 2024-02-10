@@ -57,4 +57,9 @@ public class ClientServiceImpl implements ClientService {
     public Optional<Client> getClientByEmail(String email) {
         return clientRepository.findByEmail(email);
     }
+
+    @Override
+    public long getTotalClientCount() {
+        return clientRepository.count();
+    }
 }

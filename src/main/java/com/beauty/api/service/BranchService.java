@@ -19,4 +19,6 @@ public interface BranchService {
     List<Branch> getBranchesByCompanyId(String companyId);
 
     List<Branch> getBranchesByLocation(String location);
+
+    long getTotalBranchCount();
 }

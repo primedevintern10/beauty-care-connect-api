@@ -48,6 +48,13 @@ public class ClientController {
                 .orElseGet(() -> new ResponseEntity<>(HttpStatus.NOT_FOUND));
     }
 
+    @Operation(summary = "Get Total Client Count")
+    @GetMapping("/total-count")
+    public ResponseEntity<Long> getTotalClientCount() {
+        long totalCount = clientService.getTotalClientCount();
+        return ResponseEntity.ok(totalCount);
+    }
+
     @Operation(summary = "Update a Client")
     @PutMapping("/{id}")
     public ResponseEntity<Client> update(@PathVariable("id") String clientId, @RequestBody Client client) {

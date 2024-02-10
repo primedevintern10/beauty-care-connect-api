@@ -76,4 +76,9 @@ public class BranchServiceImpl implements BranchService {
     public List<Branch> getBranchesByLocation(String location) {
         return branchRepository.findByLocation(location);
     }
+
+    @Override
+    public long getTotalBranchCount() {
+        return branchRepository.count();
+    }
 }

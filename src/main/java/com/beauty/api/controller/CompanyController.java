@@ -42,6 +42,13 @@ public class CompanyController {
                 .orElseGet(() -> ResponseEntity.notFound().build());
     }
 
+    @Operation(summary = "Get Total Company Count")
+    @GetMapping("/total-count")
+    public ResponseEntity<Long> getTotalCompanyCount() {
+        long totalCount = companyService.getTotalCompanyCount();
+        return ResponseEntity.ok(totalCount);
+    }
+
     @Operation(summary = "Update a Company")
     @PutMapping("/{id}")
     public ResponseEntity<Company> update(@PathVariable("id") String companyId, @RequestBody Company company) {

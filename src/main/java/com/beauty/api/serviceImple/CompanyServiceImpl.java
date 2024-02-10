@@ -53,4 +53,9 @@ public class CompanyServiceImpl implements CompanyService {
             return null;
         }
     }
+
+    @Override
+    public long getTotalCompanyCount() {
+        return companyRepository.count();
+    }
 }
