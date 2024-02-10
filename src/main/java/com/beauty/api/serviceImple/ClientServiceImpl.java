@@ -52,4 +52,9 @@ public class ClientServiceImpl implements ClientService {
             return null;
         }
     }
+
+    @Override
+    public Optional<Client> getClientByEmail(String email) {
+        return clientRepository.findByEmail(email);
+    }
 }

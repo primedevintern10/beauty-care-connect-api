@@ -15,4 +15,6 @@ public interface ClientService {
     boolean delete(String clientId);
 
     Client update(Client client, String clientId);
+
+    Optional<Client> getClientByEmail(String email);
 }

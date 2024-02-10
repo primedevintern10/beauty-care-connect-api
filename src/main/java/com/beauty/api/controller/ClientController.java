@@ -40,6 +40,14 @@ public class ClientController {
                 .orElseGet(() -> new ResponseEntity<>(HttpStatus.NOT_FOUND));
     }
 
+    @Operation(summary = "Get Client by Email")
+    @GetMapping("/by-email/{id}")
+    public ResponseEntity<Client> getClientByEmail(@PathVariable("email") String email) {
+        Optional<Client> client = clientService.getClientByEmail(email);
+        return client.map(value -> new ResponseEntity<>(value, HttpStatus.OK))
+                .orElseGet(() -> new ResponseEntity<>(HttpStatus.NOT_FOUND));
+    }
+
     @Operation(summary = "Update a Client")
     @PutMapping("/{id}")
     public ResponseEntity<Client> update(@PathVariable("id") String clientId, @RequestBody Client client) {
