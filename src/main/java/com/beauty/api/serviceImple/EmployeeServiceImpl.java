@@ -53,4 +53,9 @@ public class EmployeeServiceImpl implements EmployeeService {
             return Optional.empty();
         }
     }
+
+    @Override
+    public Optional<Employee> getEmployeeByEmail(String email) {
+        return employeeRepository.findByEmail(email);
+    }
 }

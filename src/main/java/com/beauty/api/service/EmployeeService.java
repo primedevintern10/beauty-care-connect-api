@@ -15,4 +15,6 @@ public interface EmployeeService {
     boolean delete(String employeeId);
 
     Optional<Employee> update(Employee employee, String employeeId);
+
+    Optional<Employee> getEmployeeByEmail(String email);
 }

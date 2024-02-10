@@ -41,6 +41,13 @@ public class EmployeeController {
         return employee.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
     }
 
+    @Operation(summary = "Get Employee by Email")
+    @GetMapping("/by-email/{email}")
+    public ResponseEntity<Employee> getEmployeeByEmail(@PathVariable("email") String email) {
+        Optional<Employee> employee = employeeService.getEmployeeByEmail(email);
+        return employee.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
+    }
+
     @Operation(summary = "Update an Employee")
     @PutMapping("/{id}")
     public ResponseEntity<Employee> update(@PathVariable("id") String employeeId, @RequestBody Employee employee) {

@@ -58,6 +58,8 @@ public class SecurityConfig {
                                 .permitAll()
                                 .requestMatchers(HttpMethod.GET, PUBLIC_GET_APIS)
                                 .permitAll()
+                                .requestMatchers("/client/**")
+                                .permitAll()
                                 .anyRequest()
                                 .authenticated())
                 .exceptionHandling(e -> e.authenticationEntryPoint(point))
