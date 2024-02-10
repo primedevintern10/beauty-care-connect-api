@@ -34,7 +34,7 @@ public class UserGroupController {
         return ResponseEntity.ok(userGroups);
     }
 
-    @Operation(summary = "Get User Group by ID")
+    @Operation(summary = "Get User Group by Id")
     @GetMapping("/{id}")
     public ResponseEntity<UserGroup> getUserGroupById(@PathVariable("id") String userGroupId) {
         Optional<UserGroup> userGroup = userGroupService.getUserGroupById(userGroupId);

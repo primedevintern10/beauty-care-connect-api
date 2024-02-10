@@ -34,7 +34,7 @@ public class BranchController {
         return new ResponseEntity<>(branches, HttpStatus.OK);
     }
 
-    @Operation(summary = "Get Branch by ID")
+    @Operation(summary = "Get Branch by Id")
     @GetMapping("/{id}")
     public ResponseEntity<Branch> getBranchById(@PathVariable("id") String branchId) {
         try {
@@ -69,7 +69,7 @@ public class BranchController {
 
     @Operation(summary = "Filter Branches by Company Id")
     @GetMapping("/by-company/{companyId}")
-    public ResponseEntity<List<Branch>> getBranchesByCompany(@PathVariable String companyId) {
+    public ResponseEntity<List<Branch>> getBranchesByCompanyId(@PathVariable String companyId) {
         List<Branch> branches = branchService.getBranchesByCompanyId(companyId);
         return new ResponseEntity<>(branches, HttpStatus.OK);
     }

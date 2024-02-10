@@ -17,4 +17,6 @@ public interface ServiceService {
     Service update(Service service, String serviceId);
 
     List<Service> getServicesByCategoryId(String categoryId);
+
+    List<Service> getServicesByBranchId(String branchId);
 }

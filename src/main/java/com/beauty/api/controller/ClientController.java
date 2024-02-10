@@ -32,7 +32,7 @@ public class ClientController {
         return clientService.getAllClients();
     }
 
-    @Operation(summary = "Get Client by ID")
+    @Operation(summary = "Get Client by Id")
     @GetMapping("/{id}")
     public ResponseEntity<Client> getClientById(@PathVariable("id") String clientId) {
         Optional<Client> client = clientService.getClientById(clientId);

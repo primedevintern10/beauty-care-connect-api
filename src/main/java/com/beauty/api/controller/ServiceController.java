@@ -41,6 +41,20 @@ public class ServiceController {
                 .orElseGet(() -> ResponseEntity.notFound().build());
     }
 
+    @Operation(summary = "Get Services by Category Id")
+    @GetMapping("/category/{categoryId}")
+    public ResponseEntity<List<Service>> getServicesByCategory(@PathVariable String categoryId) {
+        List<Service> services = serviceService.getServicesByCategoryId(categoryId);
+        return ResponseEntity.ok(services);
+    }
+
+    @Operation(summary = "Get Service by Branch Id")
+    @GetMapping("/branch/{branchId}")
+    public ResponseEntity<List<Service>> getServicesByBranchId(@PathVariable String branchId) {
+        List<Service> services = serviceService.getServicesByBranchId(branchId);
+        return ResponseEntity.ok(services);
+    }
+
     @Operation(summary = "Update a Service")
     @PutMapping("/{id}")
     public ResponseEntity<Service> update(@PathVariable("id") String serviceId, @RequestBody Service service) {
@@ -61,10 +75,4 @@ public class ServiceController {
         }
     }
 
-    @Operation(summary = "Get Services by Category Id")
-    @GetMapping("/category/{categoryId}")
-    public ResponseEntity<List<Service>> getServicesByCategory(@PathVariable String categoryId) {
-        List<Service> services = serviceService.getServicesByCategoryId(categoryId);
-        return ResponseEntity.ok(services);
-    }
 }

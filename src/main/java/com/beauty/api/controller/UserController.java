@@ -27,7 +27,7 @@ public class UserController {
         return ResponseEntity.ok(users);
     }
 
-    @Operation(summary = "Get User by ID")
+    @Operation(summary = "Get User by Id")
     @GetMapping("/{id}")
     public ResponseEntity<User> getUserById(@PathVariable("id") String userId) {
         Optional<User> user = userService.getUserById(userId);

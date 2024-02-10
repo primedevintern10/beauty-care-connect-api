@@ -56,4 +56,9 @@ public class ServiceServiceImpl implements ServiceService {
         return serviceRepository.findByCategoryId(categoryId);
     }
 
+    @Override
+    public List<Service> getServicesByBranchId(String branchId) {
+        return serviceRepository.findByBranchId(branchId);
+    }
+
 }

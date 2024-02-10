@@ -34,7 +34,7 @@ public class EmployeeController {
         return ResponseEntity.ok(employees);
     }
 
-    @Operation(summary = "Get Employee by ID")
+    @Operation(summary = "Get Employee by Id")
     @GetMapping("/{id}")
     public ResponseEntity<Employee> getEmployeeById(@PathVariable("id") String employeeId) {
         Optional<Employee> employee = employeeService.getEmployeeById(employeeId);

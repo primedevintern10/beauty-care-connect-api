@@ -23,6 +23,4 @@ public class Service {
     private ServiceCategory serviceCategory;
     @DBRef
     private List<Branch> branch;
-//    @DBRef
-//    private Company company;
 }

@@ -32,7 +32,7 @@ public class AppointmentStatusController {
         return appointmentStatusService.getAllAppointmentStatuses();
     }
 
-    @Operation(summary = "Get Appointment Status by ID")
+    @Operation(summary = "Get Appointment Status by Id")
     @GetMapping("/{id}")
     public ResponseEntity<AppointmentStatus> getAppointmentStatusById(@PathVariable("id") String appointmentStatusId) {
         Optional<AppointmentStatus> appointmentStatus = appointmentStatusService.getAppointmentStatusById(appointmentStatusId);

@@ -34,7 +34,7 @@ public class AppointmentController {
         return ResponseEntity.ok(appointments);
     }
 
-    @Operation(summary = "Get Appointment by ID")
+    @Operation(summary = "Get Appointment by Id")
     @GetMapping("/{id}")
     public ResponseEntity<Appointment> getAppointmentById(@PathVariable("id") String appointmentId) {
         Optional<Appointment> appointment = appointmentService.getAppointmentById(appointmentId);
@@ -71,7 +71,7 @@ public class AppointmentController {
 
     @Operation(summary = "Get Appointments by Client Id")
     @GetMapping("/client/{clientId}")
-    public ResponseEntity<List<Appointment>> getAppointmentsByClient(@PathVariable String clientId) {
+    public ResponseEntity<List<Appointment>> getAppointmentsByClientId(@PathVariable String clientId) {
         List<Appointment> appointments = appointmentService.getAppointmentsByClientId(clientId);
         return ResponseEntity.ok(appointments);
     }

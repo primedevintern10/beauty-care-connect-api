@@ -33,7 +33,7 @@ public class ServiceCategoryController {
         return ResponseEntity.ok(serviceCategories);
     }
 
-    @Operation(summary = "Get Service Category by ID")
+    @Operation(summary = "Get Service Category by Id")
     @GetMapping("/{id}")
     public ResponseEntity<ServiceCategory> getServiceCategoryById(@PathVariable("id") String serviceCategoryId) {
         Optional<ServiceCategory> serviceCategory = serviceCategoryService.getServiceCategoryById(serviceCategoryId);

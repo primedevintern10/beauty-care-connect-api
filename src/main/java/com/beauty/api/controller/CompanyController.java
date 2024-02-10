@@ -34,7 +34,7 @@ public class CompanyController {
         return ResponseEntity.ok(companies);
     }
 
-    @Operation(summary = "Get Company by ID")
+    @Operation(summary = "Get Company by Id")
     @GetMapping("/{id}")
     public ResponseEntity<Company> getCompanyById(@PathVariable("id") String companyId) {
         Optional<Company> company = companyService.getCompanyById(companyId);
