@@ -41,7 +41,7 @@ public class ClientController {
     }
 
     @Operation(summary = "Get Client by Email")
-    @GetMapping("/by-email/{id}")
+    @GetMapping("/by-email/{email}")
     public ResponseEntity<Client> getClientByEmail(@PathVariable("email") String email) {
         Optional<Client> client = clientService.getClientByEmail(email);
         return client.map(value -> new ResponseEntity<>(value, HttpStatus.OK))
