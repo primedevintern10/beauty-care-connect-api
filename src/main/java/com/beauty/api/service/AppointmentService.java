@@ -1,6 +1,7 @@
 package com.beauty.api.service;
 
 import com.beauty.api.collection.Appointment;
+import com.beauty.api.models.AppointmentCount;
 
 import java.util.List;
 import java.util.Optional;
@@ -25,4 +26,14 @@ public interface AppointmentService {
     int getTotalCompletedAppointmentsForBranch(String id);
 
     int calculateTotalRatingForBranch(String id);
+
+    AppointmentCount getAppointmentCounts();
+
+    long getTotalAppointmentCount();
+
+    long getCompletedAppointmentsCount();
+
+    long getPendingAppointmentsCount();
+
+    long getConfirmedAppointmentsCount();
 }

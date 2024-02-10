@@ -1,6 +1,7 @@
 package com.beauty.api.controller;
 
 import com.beauty.api.collection.Appointment;
+import com.beauty.api.models.AppointmentCount;
 import com.beauty.api.service.AppointmentService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -82,5 +83,12 @@ public class AppointmentController {
             @PathVariable String clientId, @PathVariable String statusId) {
         List<Appointment> appointments = appointmentService.getAppointmentsByClientAndStatusId(clientId, statusId);
         return ResponseEntity.ok(appointments);
+    }
+
+    @Operation(summary = "Get Appointment Counts")
+    @GetMapping("/counts")
+    public ResponseEntity<AppointmentCount> getAppointmentCounts() {
+        AppointmentCount counts = appointmentService.getAppointmentCounts();
+        return ResponseEntity.ok(counts);
     }
 }

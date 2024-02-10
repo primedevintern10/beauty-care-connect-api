@@ -1,6 +1,7 @@
 package com.beauty.api.serviceImple;
 
 import com.beauty.api.collection.Appointment;
+import com.beauty.api.models.AppointmentCount;
 import com.beauty.api.models.Review;
 import com.beauty.api.repository.AppointmentRepository;
 import com.beauty.api.service.AppointmentService;
@@ -85,7 +86,37 @@ public class AppointmentServiceImpl implements AppointmentService {
     }
 
     @Override
+    public AppointmentCount getAppointmentCounts() {
+        AppointmentCount counts = new AppointmentCount();
+        counts.setTotalCount(getTotalAppointmentCount());
+        counts.setCompletedCount(getCompletedAppointmentsCount());
+        counts.setPendingCount(getPendingAppointmentsCount());
+        counts.setConfirmedCount(getConfirmedAppointmentsCount());
+        return counts;
+    }
+
+    @Override
     public int getTotalCompletedAppointmentsForBranch(String branchId) {
         return appointmentRepository.countByBranchIdAndStatus(branchId, "65917db3c01b79393720710c");
+    }
+
+    @Override
+    public long getTotalAppointmentCount() {
+        return appointmentRepository.count();
+    }
+
+    @Override
+    public long getCompletedAppointmentsCount() {
+        return appointmentRepository.countByStatusId("65917db3c01b79393720710c");
+    }
+
+    @Override
+    public long getPendingAppointmentsCount() {
+        return appointmentRepository.countByStatusId("65917dd1c01b79393720710d");
+    }
+
+    @Override
+    public long getConfirmedAppointmentsCount() {
+        return appointmentRepository.countByStatusId("65917ddbc01b79393720710e");
     }
 }

@@ -23,4 +23,7 @@ public interface AppointmentRepository extends MongoRepository<Appointment, Stri
 
     @Query(value = "{ 'branch._id' : ?0, 'status._id' : ?1 }", count = true)
     int countByBranchIdAndStatus(String branchId, String statusId);
+
+    @Query(value = "{ 'status._id' : ?0 }", count = true)
+    long countByStatusId(String statusId);
 }
