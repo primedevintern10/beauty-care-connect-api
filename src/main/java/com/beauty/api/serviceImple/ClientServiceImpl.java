@@ -42,7 +42,7 @@ public class ClientServiceImpl implements ClientService {
         if (existingClientData != null) {
             existingClientData.setFirstName(client.getFirstName());
             existingClientData.setLastName(client.getLastName());
-            existingClientData.setContactNo(client.getContactNo());
+            existingClientData.setPhoneNumber(client.getPhoneNumber());
             existingClientData.setEmail(client.getEmail());
             existingClientData.setIsAnonymous(client.getIsAnonymous());
             existingClientData.setAddress(client.getAddress());

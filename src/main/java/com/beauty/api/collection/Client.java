@@ -1,6 +1,5 @@
 package com.beauty.api.collection;
 
-import com.beauty.api.models.Address;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.Builder;
 import lombok.Data;
@@ -16,9 +15,9 @@ public class Client {
     private String _id;
     private String firstName;
     private String lastName;
-    private String contactNo;
+    private String phoneNumber;
     private String email;
+    private String address;
     @Builder.Default
     private Boolean isAnonymous = false;
-    private Address address;
 }
