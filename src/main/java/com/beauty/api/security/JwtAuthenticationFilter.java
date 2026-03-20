@@ -62,18 +62,21 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         }
 
         if (username != null && SecurityContextHolder.getContext().getAuthentication() == null) {
+            try {
+                //fetch user detail from username
+                UserDetails userDetails = this.userDetailsService.loadUserByUsername(username);
+                Boolean validateToken = this.jwtHelper.validateToken(token, userDetails);
 
-            //fetch user detail from username
-            UserDetails userDetails = this.userDetailsService.loadUserByUsername(username);
-            Boolean validateToken = this.jwtHelper.validateToken(token, userDetails);
-
-            if (validateToken) {
-                //set the authentication
-                UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
-                authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
-                SecurityContextHolder.getContext().setAuthentication(authentication);
-            } else {
-                logger.info("Validation fails !!");
+                if (validateToken) {
+                    //set the authentication
+                    UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
+                    authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
+                    SecurityContextHolder.getContext().setAuthentication(authentication);
+                } else {
+                    logger.info("Validation fails !!");
+                }
+            } catch (Exception e) {
+                logger.info("Could not authenticate user: {}", e.getMessage());
             }
         }
 
