@@ -1,12 +1,11 @@
 package com.beauty.api.collection;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.Builder;
 import lombok.Data;
 import org.springframework.data.annotation.Id;
-import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
+import org.springframework.data.mongodb.core.mapping.Field;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
@@ -14,20 +13,22 @@ import java.util.Collection;
 
 @Data
 @Builder
-@Document(collection = "User")
+@Document(collection = "Users")
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class User implements UserDetails {
     @Id
     private String _id;
-    private String firstName;
-    private String lastName;
+    private String name;
+    @Field("email")
     private String username;
-    private String nicPassport;
-    private String email;
-    private String contactNo;
     private String password;
-    @DBRef
-    private UserGroup userGroup;
+    private String role;
+    private String phone;
+
+    @Override
+    public String getUsername() {
+        return username;
+    }
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {

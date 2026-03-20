@@ -39,12 +39,10 @@ public class UserServiceImpl implements UserService, UserDetailsService {
         User existingUserData = userRepository.findById(userId).orElse(null);
 
         if (existingUserData != null) {
-            existingUserData.setFirstName(user.getFirstName());
-            existingUserData.setLastName(user.getLastName());
-            existingUserData.setNicPassport(user.getNicPassport());
-            existingUserData.setEmail(user.getEmail());
-            existingUserData.setContactNo(user.getContactNo());
-            existingUserData.setUserGroup(user.getUserGroup());
+            existingUserData.setName(user.getName());
+            existingUserData.setUsername(user.getUsername());
+            existingUserData.setRole(user.getRole());
+            existingUserData.setPhone(user.getPhone());
 
             return userRepository.save(existingUserData);
         } else {
