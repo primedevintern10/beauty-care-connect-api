@@ -24,7 +24,9 @@ public class UserServiceImpl implements UserService, UserDetailsService {
 
     @Override
     public String save(User user) {
-        user.setPassword(passwordEncoder.encode(user.getPassword()));
+        // Save password as plain text (for testing only)
+        // WARNING: This is insecure and should not be used in production
+        // user.setPassword(passwordEncoder.encode(user.getPassword()));
         return userRepository.save(user).get_id();
     }
 
