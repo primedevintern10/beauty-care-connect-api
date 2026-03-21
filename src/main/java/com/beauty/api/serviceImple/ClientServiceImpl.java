@@ -31,8 +31,12 @@ public class ClientServiceImpl implements ClientService {
 
     @Override
     public boolean delete(String clientId) {
+        if (!clientRepository.existsById(clientId)) {
+            return false;
+        }
+
         clientRepository.deleteById(clientId);
-        return false;
+        return true;
     }
 
     @Override
