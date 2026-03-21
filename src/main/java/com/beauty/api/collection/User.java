@@ -5,10 +5,12 @@ import lombok.Builder;
 import lombok.Data;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
+import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.Collection;
+import java.util.Date;
 
 @Data
 @Builder
@@ -17,11 +19,20 @@ import java.util.Collection;
 public class User implements UserDetails {
     @Id
     private String _id;
-    private String name;
+    private String firstName;
+    private String lastName;
+    
+    @Indexed(unique = true)
     private String username;
+    
+    private String email;
+    private String contactNo;
+    private String nicPassport;
     private String password;
     private String role;
-    private String phone;
+    private String userGroup;
+    private Date created_at;
+    private Date updated_at;
 
     @Override
     public String getUsername() {
