@@ -67,10 +67,15 @@ public class AuthController {
         String userId = userService.getUserIdByUsername(request.getUsername());
         String token = this.helper.generateToken(userDetails);
 
+        // Fetch full user object to include role in response
+        User user = userRepository.findByUsername(request.getUsername()).orElse(null);
+        String userRole = (user != null) ? user.getRole() : "";
+
         JwtResponse response = JwtResponse.builder()
                 .jwtToken(token)
                 .username(userDetails.getUsername())
                 ._id(userId)
+                .role(userRole)
                 .build();
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
