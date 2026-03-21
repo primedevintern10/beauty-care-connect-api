@@ -49,31 +49,53 @@ public class AuthController {
     public ResponseEntity<?> login(@RequestBody JwtRequest request) {
         if (request.getUsername() == null || request.getPassword() == null) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-                    .body(Map.of("message", "Username and password are required"));
+                .body(Map.of("message", "Username and password are required"));
         }
 
-        Optional<User> userOpt = userRepository.findByUsername(request.getUsername());
 
-        if (userOpt.isEmpty()) {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
-                    .body(Map.of("message", "Invalid username or password"));
-        }
+        try {
+            Optional<User> userOpt = userRepository.findByUsername(request.getUsername());
 
-        User user = userOpt.get();
+            if (userOpt.isEmpty()) {
+                return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                        .body(Map.of("message", "User not found"));
+            }
 
-        if (!user.getPassword().equals(request.getPassword())) {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
-                    .body(Map.of("message", "Invalid username or password"));
+            User user = userOpt.get();
+
+            if (!user.getPassword().equals(request.getPassword())) {
+                return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+                        .body(Map.of("message", "Password incorrect"));
+            }
+
+            String token = helper.generateToken(user);
+
+            JwtResponse response = JwtResponse.builder()
+                    .jwtToken(token)
+                    .username(user.getUsername())
+                    ._id(user.get_id())
+                    .role(user.getRole())
+                    .build();
+
+            return ResponseEntity.ok(response);
+        } catch (org.springframework.data.mongodb.UncategorizedMongoDbException e) {
+            // Database not found
+            return ResponseEntity.status(402).body(Map.of("message", "Database not found"));
+        } catch (org.springframework.data.mongodb.core.MongoTemplate.NoSuchCollectionException e) {
+            // Collection not found
+            return ResponseEntity.status(403).body(Map.of("message", "Collection not found"));
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(Map.of("message", "Internal server error"));
         }
 
         String token = helper.generateToken(user);
 
         JwtResponse response = JwtResponse.builder()
-                .jwtToken(token)
-                .username(user.getUsername())
-                ._id(user.get_id())
-                .role(user.getRole())
-                .build();
+            .jwtToken(token)
+            .username(user.getUsername())
+            ._id(user.get_id())
+            .role(user.getRole())
+            .build();
 
         return ResponseEntity.ok(response);
     }
