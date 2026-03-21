@@ -9,7 +9,6 @@ import com.beauty.api.models.ResetPasswordRequest;
 import com.beauty.api.repository.PasswordResetTokenRepository;
 import com.beauty.api.repository.UserRepository;
 import com.beauty.api.security.JwtHelper;
-import com.beauty.api.service.UserService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.slf4j.Logger;
@@ -17,11 +16,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.BadCredentialsException;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
@@ -35,17 +29,9 @@ import java.util.UUID;
 @RequestMapping("/auth")
 @Tag(name = "Authentication")
 public class AuthController {
-    @Autowired
-    private AuthenticationManager manager;
 
     @Autowired
     private JwtHelper helper;
-
-    @Autowired
-    private UserDetailsService userDetailsService;
-
-    @Autowired
-    private UserService userService;
 
     @Autowired
     private UserRepository userRepository;
@@ -60,40 +46,47 @@ public class AuthController {
 
     @Operation(summary = "Login/Sign In")
     @PostMapping("/login")
-    public ResponseEntity<JwtResponse> login(@RequestBody JwtRequest request) {
-        this.doAuthenticate(request.getUsername(), request.getPassword());
+    public ResponseEntity<?> login(@RequestBody JwtRequest request) {
+        if (request.getUsername() == null || request.getPassword() == null) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                    .body(Map.of("message", "Username and password are required"));
+        }
 
-        UserDetails userDetails = userDetailsService.loadUserByUsername(request.getUsername());
-        String userId = userService.getUserIdByUsername(request.getUsername());
-        String token = this.helper.generateToken(userDetails);
+        Optional<User> userOpt = userRepository.findByUsername(request.getUsername());
 
-        // Fetch full user object to include role in response
-        User user = userRepository.findByUsername(request.getUsername()).orElse(null);
-        String userRole = (user != null) ? user.getRole() : "";
+        if (userOpt.isEmpty()) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+                    .body(Map.of("message", "Invalid username or password"));
+        }
+
+        User user = userOpt.get();
+
+        if (!user.getPassword().equals(request.getPassword())) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+                    .body(Map.of("message", "Invalid username or password"));
+        }
+
+        String token = helper.generateToken(user);
 
         JwtResponse response = JwtResponse.builder()
                 .jwtToken(token)
-                .username(userDetails.getUsername())
-                ._id(userId)
-                .role(userRole)
+                .username(user.getUsername())
+                ._id(user.get_id())
+                .role(user.getRole())
                 .build();
-        return new ResponseEntity<>(response, HttpStatus.OK);
-    }
 
-    private void doAuthenticate(String username, String password) {
-        UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(username, password);
-
-        try {
-            manager.authenticate(authentication);
-        } catch (BadCredentialsException e) {
-            throw new BadCredentialsException("Invalid Username or Password.");
-        }
+        return ResponseEntity.ok(response);
     }
 
     @Operation(summary = "Register/Sign Up")
     @PostMapping("/register")
-    public String createUser(@RequestBody User user){
-        return userService.save(user);
+    public ResponseEntity<?> createUser(@RequestBody User user) {
+        if (userRepository.findByUsername(user.getUsername()).isPresent()) {
+            return ResponseEntity.status(HttpStatus.CONFLICT)
+                    .body(Map.of("message", "Username already exists"));
+        }
+        String id = userRepository.save(user).get_id();
+        return ResponseEntity.ok(Map.of("id", id));
     }
 
     @Operation(summary = "Request Password Reset")
@@ -108,7 +101,6 @@ public class AuthController {
 
         Optional<User> userOptional = userRepository.findByEmail(request.getEmail());
 
-        // Keep response generic to avoid account enumeration.
         if (userOptional.isEmpty()) {
             response.put("message", "If an account with this email exists, a reset token has been generated.");
             return ResponseEntity.ok(response);
@@ -181,7 +173,7 @@ public class AuthController {
         }
 
         User user = userOptional.get();
-        user.setPassword(passwordEncoder.encode(request.getPassword()));
+        user.setPassword(request.getPassword());
         user.setUpdated_at(new Date());
         userRepository.save(user);
 
@@ -190,10 +182,5 @@ public class AuthController {
 
         response.put("message", "Password reset successful.");
         return ResponseEntity.ok(response);
-    }
-
-    @ExceptionHandler(BadCredentialsException.class)
-    public ResponseEntity<String> handleBadCredentialsException(BadCredentialsException e) {
-        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid Credentials.");
     }
 }

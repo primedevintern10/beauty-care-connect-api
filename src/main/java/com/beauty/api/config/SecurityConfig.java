@@ -7,34 +7,17 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
-import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.Customizer;
+import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
-import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 @Configuration
 @AllArgsConstructor
+@EnableMethodSecurity
 public class SecurityConfig {
-    public static final String[] PUBLIC_URLS = {
-            "/auth/**",
-            "/v3/api-docs",
-            "/v3/api-docs/**",
-            "/swagger-resources/**",
-            "/swagger-ui/**",
-            "/swagger-ui.html",
-            "/webjars/**"
-    };
-
-    public static final String[] PUBLIC_GET_APIS = {
-            "/company/**",
-            "/branch/**",
-            "/service/**",
-            "/serviceCategory/**"
-    };
 
     @Autowired
     private JwtAuthenticationEntryPoint point;
@@ -42,51 +25,52 @@ public class SecurityConfig {
     @Autowired
     private JwtAuthenticationFilter filter;
 
-    @Autowired
-    private UserDetailsService userDetailsService;
-
-    @Autowired
-    private PasswordEncoder passwordEncoder;
-
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-
         http.cors(Customizer.withDefaults())
                 .csrf(csrf -> csrf.disable())
-                .authorizeHttpRequests(
-                        auth -> auth.requestMatchers(HttpMethod.OPTIONS, "/**")
-                                .permitAll()
-                                .requestMatchers("/home")
-                                .authenticated()
-                                .requestMatchers(PUBLIC_URLS)
-                                .permitAll()
-                                .requestMatchers("/client", "/client/**", "/api/client", "/api/client/**")
-                                .permitAll()
-                                .requestMatchers(HttpMethod.GET, PUBLIC_GET_APIS)
-                                .permitAll()
-                                .requestMatchers("/company", "/company/**", "/api/company", "/api/company/**")
-                                .permitAll()
-                                .requestMatchers("/employee", "/employee/**", "/api/employee", "/api/employee/**")
-                                .permitAll()
-                                .requestMatchers("/user", "/user/**", "/api/user", "/api/user/**")
-                                .permitAll()
-                                .anyRequest()
-                                .authenticated())
+                .authorizeHttpRequests(auth -> auth
+                        // Allow preflight requests
+                        .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
+
+                        // Public auth endpoints
+                        .requestMatchers("/auth/**").permitAll()
+
+                        // Public read-only endpoints (for customers browsing)
+                        .requestMatchers(HttpMethod.GET, "/company/**", "/branch/**", "/service/**", "/serviceCategory/**").permitAll()
+
+                        // Swagger
+                        .requestMatchers("/v3/api-docs/**", "/swagger-resources/**", "/swagger-ui/**", "/webjars/**").permitAll()
+
+                        // ADMIN only
+                        .requestMatchers(HttpMethod.POST, "/company", "/company/**").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.PUT, "/company/**").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.DELETE, "/company/**").hasRole("ADMIN")
+                        .requestMatchers("/user/**").hasRole("ADMIN")
+                        .requestMatchers("/userGroup/**").hasRole("ADMIN")
+
+                        // ADMIN or OWNER
+                        .requestMatchers("/employee/**").hasAnyRole("ADMIN", "OWNER")
+                        .requestMatchers(HttpMethod.POST, "/service", "/service/**").hasAnyRole("ADMIN", "OWNER")
+                        .requestMatchers(HttpMethod.PUT, "/service/**").hasAnyRole("ADMIN", "OWNER")
+                        .requestMatchers(HttpMethod.DELETE, "/service/**").hasAnyRole("ADMIN", "OWNER")
+                        .requestMatchers(HttpMethod.POST, "/serviceCategory", "/serviceCategory/**").hasAnyRole("ADMIN", "OWNER")
+                        .requestMatchers(HttpMethod.PUT, "/serviceCategory/**").hasAnyRole("ADMIN", "OWNER")
+                        .requestMatchers(HttpMethod.DELETE, "/serviceCategory/**").hasAnyRole("ADMIN", "OWNER")
+                        .requestMatchers("/client/**").hasAnyRole("ADMIN", "OWNER")
+
+                        // ADMIN, OWNER, or EMP
+                        .requestMatchers("/appointment/**").hasAnyRole("ADMIN", "OWNER", "EMP")
+                        .requestMatchers("/appointmentStatus/**").hasAnyRole("ADMIN", "OWNER", "EMP")
+
+                        // Any authenticated user
+                        .anyRequest().authenticated()
+                )
                 .exceptionHandling(e -> e.authenticationEntryPoint(point))
-                .sessionManagement(
-                        session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
+                .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
 
         http.addFilterBefore(filter, UsernamePasswordAuthenticationFilter.class);
 
         return http.build();
-    }
-
-    @Bean
-    public DaoAuthenticationProvider doDaoAuthenticationProvider(){
-        DaoAuthenticationProvider authProvider = new DaoAuthenticationProvider();
-        authProvider.setUserDetailsService(userDetailsService);
-        authProvider.setPasswordEncoder(passwordEncoder);
-
-        return authProvider;
     }
 }
