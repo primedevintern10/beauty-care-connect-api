@@ -15,8 +15,8 @@ public class ClientServiceImpl implements ClientService {
     private ClientRepository clientRepository;
 
     @Override
-    public String save(Client client) {
-        return clientRepository.save(client).getFirstName();
+    public Client save(Client client) {
+        return clientRepository.save(client);
     }
 
     @Override
@@ -30,8 +30,13 @@ public class ClientServiceImpl implements ClientService {
     }
 
     @Override
-    public void delete(String clientId) {
+    public boolean delete(String clientId) {
+        if (!clientRepository.existsById(clientId)) {
+            return false;
+        }
+
         clientRepository.deleteById(clientId);
+        return true;
     }
 
     @Override
@@ -41,7 +46,7 @@ public class ClientServiceImpl implements ClientService {
         if (existingClientData != null) {
             existingClientData.setFirstName(client.getFirstName());
             existingClientData.setLastName(client.getLastName());
-            existingClientData.setContactNo(client.getContactNo());
+            existingClientData.setPhoneNumber(client.getPhoneNumber());
             existingClientData.setEmail(client.getEmail());
             existingClientData.setIsAnonymous(client.getIsAnonymous());
             existingClientData.setAddress(client.getAddress());
@@ -50,5 +55,15 @@ public class ClientServiceImpl implements ClientService {
         } else {
             return null;
         }
+    }
+
+    @Override
+    public Optional<Client> getClientByEmail(String email) {
+        return clientRepository.findByEmail(email);
+    }
+
+    @Override
+    public long getTotalClientCount() {
+        return clientRepository.count();
     }
 }

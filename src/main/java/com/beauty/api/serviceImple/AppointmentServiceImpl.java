@@ -1,9 +1,12 @@
 package com.beauty.api.serviceImple;
 
 import com.beauty.api.collection.Appointment;
+import com.beauty.api.models.AppointmentCount;
+import com.beauty.api.models.Review;
 import com.beauty.api.repository.AppointmentRepository;
 import com.beauty.api.service.AppointmentService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -15,13 +18,13 @@ public class AppointmentServiceImpl implements AppointmentService {
     private AppointmentRepository appointmentRepository;
 
     @Override
-    public String save(Appointment appointment) {
-        return appointmentRepository.save(appointment).get_id();
+    public Appointment save(Appointment appointment) {
+        return appointmentRepository.save(appointment);
     }
 
     @Override
     public List<Appointment> getAllAppointments() {
-        return appointmentRepository.findAll();
+        return appointmentRepository.findAll(Sort.by(Sort.Direction.ASC, "date"));
     }
 
     @Override
@@ -30,8 +33,9 @@ public class AppointmentServiceImpl implements AppointmentService {
     }
 
     @Override
-    public void delete(String appointmentId) {
+    public boolean delete(String appointmentId) {
         appointmentRepository.deleteById(appointmentId);
+        return false;
     }
 
     @Override
@@ -55,5 +59,64 @@ public class AppointmentServiceImpl implements AppointmentService {
         } else {
             return null;
         }
+    }
+
+    @Override
+    public List<Appointment> getAppointmentsByBranchId(String branchId) {
+        return appointmentRepository.findByBranchId(branchId);
+    }
+
+    @Override
+    public List<Appointment> getAppointmentsByClientId(String clientId) {
+        return appointmentRepository.findByClientId(clientId);
+    }
+
+    @Override
+    public List<Appointment> getAppointmentsByClientAndStatusId(String clientId, String statusId) {
+        return appointmentRepository.findByClientIdAndStatusId(clientId, statusId);
+    }
+
+    @Override
+    public int calculateTotalRatingForBranch(String branchId) {
+        List<Appointment> completedAppointments = appointmentRepository.findByBranchIdAndStatus(branchId, "65917db3c01b79393720710c");
+        return completedAppointments.stream()
+                .mapToInt(appointment -> appointment.getReviews().stream()
+                        .mapToInt(Review::getRating).sum())
+                .sum();
+    }
+
+    @Override
+    public AppointmentCount getAppointmentCounts() {
+        AppointmentCount counts = new AppointmentCount();
+        counts.setTotalCount(getTotalAppointmentCount());
+        counts.setCompletedCount(getCompletedAppointmentsCount());
+        counts.setPendingCount(getPendingAppointmentsCount());
+        counts.setConfirmedCount(getConfirmedAppointmentsCount());
+        return counts;
+    }
+
+    @Override
+    public int getTotalCompletedAppointmentsForBranch(String branchId) {
+        return appointmentRepository.countByBranchIdAndStatus(branchId, "65917db3c01b79393720710c");
+    }
+
+    @Override
+    public long getTotalAppointmentCount() {
+        return appointmentRepository.count();
+    }
+
+    @Override
+    public long getCompletedAppointmentsCount() {
+        return appointmentRepository.countByStatusId("65917db3c01b79393720710c");
+    }
+
+    @Override
+    public long getPendingAppointmentsCount() {
+        return appointmentRepository.countByStatusId("65917dd1c01b79393720710d");
+    }
+
+    @Override
+    public long getConfirmedAppointmentsCount() {
+        return appointmentRepository.countByStatusId("65917ddbc01b79393720710e");
     }
 }

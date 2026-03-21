@@ -7,6 +7,8 @@ import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
 
+import java.util.List;
+
 @Data
 @Builder
 @Document(collection = "Service")
@@ -19,4 +21,6 @@ public class Service {
     private Boolean isEnabled;
     @DBRef
     private ServiceCategory serviceCategory;
+    @DBRef
+    private List<Branch> branch;
 }

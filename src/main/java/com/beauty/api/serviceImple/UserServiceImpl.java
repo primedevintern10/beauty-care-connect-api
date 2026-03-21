@@ -29,8 +29,13 @@ public class UserServiceImpl implements UserService, UserDetailsService {
     }
 
     @Override
-    public void delete(String userId) {
+    public boolean delete(String userId) {
+        if (!userRepository.existsById(userId)) {
+            return false;
+        }
+
         userRepository.deleteById(userId);
+        return true;
     }
 
     @Override
@@ -38,14 +43,10 @@ public class UserServiceImpl implements UserService, UserDetailsService {
         User existingUserData = userRepository.findById(userId).orElse(null);
 
         if (existingUserData != null) {
-            existingUserData.setFirstName(user.getFirstName());
-            existingUserData.setLastName(user.getLastName());
-//            existingUserData.setUsername(user.getUsername());
-            existingUserData.setNicPassport(user.getNicPassport());
-            existingUserData.setEmail(user.getEmail());
-            existingUserData.setContactNo(user.getContactNo());
-//            existingUserData.setPassword(user.getPassword());
-            existingUserData.setUserGroup(user.getUserGroup());
+            existingUserData.setName(user.getName());
+            existingUserData.setUsername(user.getUsername());
+            existingUserData.setRole(user.getRole());
+            existingUserData.setPhone(user.getPhone());
 
             return userRepository.save(existingUserData);
         } else {
@@ -66,6 +67,13 @@ public class UserServiceImpl implements UserService, UserDetailsService {
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         return userRepository.findByUsername(username).orElseThrow(() -> new RuntimeException("User "+username+" not found."));
+    }
+
+    @Override
+    public String getUserIdByUsername(String username) {
+        return userRepository.findByUsername(username)
+                .map(User::get_id)
+                .orElse(null);
     }
 
 }

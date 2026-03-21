@@ -6,7 +6,9 @@ import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
+import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -27,6 +29,13 @@ public class SecurityConfig {
             "/webjars/**"
     };
 
+    public static final String[] PUBLIC_GET_APIS = {
+            "/company/**",
+            "/branch/**",
+            "/service/**",
+            "/serviceCategory/**"
+    };
+
     @Autowired
     private JwtAuthenticationEntryPoint point;
 
@@ -42,12 +51,24 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
 
-        http.csrf(csrf -> csrf.disable())
-                .cors(cors -> cors.disable())
+        http.cors(Customizer.withDefaults())
+                .csrf(csrf -> csrf.disable())
                 .authorizeHttpRequests(
-                        auth -> auth.requestMatchers("/home")
+                        auth -> auth.requestMatchers(HttpMethod.OPTIONS, "/**")
+                                .permitAll()
+                                .requestMatchers("/home")
                                 .authenticated()
                                 .requestMatchers(PUBLIC_URLS)
+                                .permitAll()
+                                .requestMatchers("/client", "/client/**", "/api/client", "/api/client/**")
+                                .permitAll()
+                                .requestMatchers(HttpMethod.GET, PUBLIC_GET_APIS)
+                                .permitAll()
+                                .requestMatchers("/company", "/company/**", "/api/company", "/api/company/**")
+                                .permitAll()
+                                .requestMatchers("/employee", "/employee/**", "/api/employee", "/api/employee/**")
+                                .permitAll()
+                                .requestMatchers("/user", "/user/**", "/api/user", "/api/user/**")
                                 .permitAll()
                                 .anyRequest()
                                 .authenticated())

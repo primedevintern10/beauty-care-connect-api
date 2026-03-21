@@ -6,13 +6,17 @@ import java.util.List;
 import java.util.Optional;
 
 public interface ServiceService {
-    String save(Service service);
+    Service save(Service service);
 
     List<Service> getAllServices();
 
     Optional<Service> getServiceById(String serviceId);
 
-    void delete(String serviceId);
+    boolean delete(String serviceId);
 
     Service update(Service service, String serviceId);
+
+    List<Service> getServicesByCategoryId(String categoryId);
+
+    List<Service> getServicesByBranchId(String branchId);
 }

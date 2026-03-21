@@ -15,8 +15,8 @@ public class AppointmentStatusServiceImpl implements AppointmentStatusService {
     private AppointmentStatusRepository appointmentStatusRepository;
 
     @Override
-    public String save(AppointmentStatus appointmentStatus) {
-        return appointmentStatusRepository.save(appointmentStatus).getStatus();
+    public AppointmentStatus save(AppointmentStatus appointmentStatus) {
+        return appointmentStatusRepository.save(appointmentStatus);
     }
 
     @Override
@@ -30,8 +30,9 @@ public class AppointmentStatusServiceImpl implements AppointmentStatusService {
     }
 
     @Override
-    public void delete(String appointmentStatusId) {
+    public boolean delete(String appointmentStatusId) {
         appointmentStatusRepository.deleteById(appointmentStatusId);
+        return false;
     }
 
     @Override

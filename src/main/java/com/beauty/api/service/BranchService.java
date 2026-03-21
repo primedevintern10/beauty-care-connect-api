@@ -6,13 +6,19 @@ import java.util.List;
 import java.util.Optional;
 
 public interface BranchService {
-    String save(Branch branch);
+    Branch save(Branch branch);
 
     List<Branch> getAllBranches();
 
     Optional<Branch> getBranchById(String branchId);
 
-    void delete(String branchId);
+    boolean delete(String branchId);
 
     Branch update(Branch branch, String branchId);
+
+    List<Branch> getBranchesByCompanyId(String companyId);
+
+    List<Branch> getBranchesByLocation(String location);
+
+    long getTotalBranchCount();
 }

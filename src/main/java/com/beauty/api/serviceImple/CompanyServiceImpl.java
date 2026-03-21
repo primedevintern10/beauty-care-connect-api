@@ -15,8 +15,8 @@ public class CompanyServiceImpl implements CompanyService {
     private CompanyRepository companyRepository;
 
     @Override
-    public String save(Company company) {
-        return companyRepository.save(company).getName();
+    public Company save(Company company) {
+        return companyRepository.save(company);
     }
 
     @Override
@@ -30,8 +30,13 @@ public class CompanyServiceImpl implements CompanyService {
     }
 
     @Override
-    public void delete(String companyId) {
+    public boolean delete(String companyId) {
+        if (!companyRepository.existsById(companyId)) {
+            return false;
+        }
+
         companyRepository.deleteById(companyId);
+        return true;
     }
 
     @Override
@@ -46,11 +51,15 @@ public class CompanyServiceImpl implements CompanyService {
             existingCompanyData.setWebUrl(company.getWebUrl());
             existingCompanyData.setCountry(company.getCountry());
             existingCompanyData.setCurrency(company.getCurrency());
-            existingCompanyData.setBranches(company.getBranches());
 
             return companyRepository.save(existingCompanyData);
         } else {
             return null;
         }
+    }
+
+    @Override
+    public long getTotalCompanyCount() {
+        return companyRepository.count();
     }
 }

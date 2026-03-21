@@ -6,13 +6,15 @@ import java.util.List;
 import java.util.Optional;
 
 public interface CompanyService {
-    String save(Company company);
+    Company save(Company company);
 
     List<Company> getAllCompanies();
 
     Optional<Company> getCompanyById(String companyId);
 
-    void delete(String companyId);
+    boolean delete(String companyId);
 
     Company update(Company company, String companyId);
+
+    long getTotalCompanyCount();
 }

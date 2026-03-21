@@ -14,8 +14,8 @@ public class ServiceServiceImpl implements ServiceService {
     private ServiceRepository serviceRepository;
 
     @Override
-    public String save(Service service) {
-        return serviceRepository.save(service).getName();
+    public Service save(Service service) {
+        return serviceRepository.save(service);
     }
 
     @Override
@@ -29,8 +29,9 @@ public class ServiceServiceImpl implements ServiceService {
     }
 
     @Override
-    public void delete(String serviceId) {
+    public boolean delete(String serviceId) {
         serviceRepository.deleteById(serviceId);
+        return false;
     }
 
     @Override
@@ -42,10 +43,22 @@ public class ServiceServiceImpl implements ServiceService {
             existingServiceData.setRequiredTime(service.getRequiredTime());
             existingServiceData.setIsEnabled(service.getIsEnabled());
             existingServiceData.setServiceCategory(service.getServiceCategory());
+            existingServiceData.setBranch(service.getBranch());
 
             return serviceRepository.save(existingServiceData);
         } else {
             return null;
         }
     }
+
+    @Override
+    public List<Service> getServicesByCategoryId(String categoryId) {
+        return serviceRepository.findByCategoryId(categoryId);
+    }
+
+    @Override
+    public List<Service> getServicesByBranchId(String branchId) {
+        return serviceRepository.findByBranchId(branchId);
+    }
+
 }
