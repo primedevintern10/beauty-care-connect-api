@@ -30,8 +30,12 @@ public class UserServiceImpl implements UserService, UserDetailsService {
 
     @Override
     public boolean delete(String userId) {
+        if (!userRepository.existsById(userId)) {
+            return false;
+        }
+
         userRepository.deleteById(userId);
-        return false;
+        return true;
     }
 
     @Override

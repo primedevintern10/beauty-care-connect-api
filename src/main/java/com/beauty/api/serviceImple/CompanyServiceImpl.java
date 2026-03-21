@@ -31,8 +31,12 @@ public class CompanyServiceImpl implements CompanyService {
 
     @Override
     public boolean delete(String companyId) {
+        if (!companyRepository.existsById(companyId)) {
+            return false;
+        }
+
         companyRepository.deleteById(companyId);
-        return false;
+        return true;
     }
 
     @Override
