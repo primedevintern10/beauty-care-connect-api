@@ -18,7 +18,7 @@ import java.util.Date;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@Document(collection = "Users")
+@Document(collection = "User")
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class User implements UserDetails {
     @Id
