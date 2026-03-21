@@ -26,9 +26,9 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
     private Logger logger = LoggerFactory.getLogger(OncePerRequestFilter.class);
 
-    private static final List<String> PUBLIC_PATHS = List.of(
-            "/auth/**", "/client", "/client/**"
-    );
+        private static final List<String> PUBLIC_PATHS = List.of(
+            "/auth/**"
+        );
 
     private final AntPathMatcher pathMatcher = new AntPathMatcher();
 
