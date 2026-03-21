@@ -41,7 +41,9 @@ public class User implements UserDetails {
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return null;
+        return java.util.Collections.singletonList(
+            new org.springframework.security.core.authority.SimpleGrantedAuthority("ROLE_" + this.role)
+        );
     }
 
     @Override
