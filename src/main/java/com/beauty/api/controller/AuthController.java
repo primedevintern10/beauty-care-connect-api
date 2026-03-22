@@ -47,6 +47,22 @@ public class AuthController {
     @Operation(summary = "Login/Sign In")
     @PostMapping("/login")
     public ResponseEntity<?> login(@RequestBody JwtRequest request) {
+                // DEBUG LOGGING START
+                String dbName = "<unknown>";
+                String collectionName = "<unknown>";
+                try {
+                    org.springframework.data.mongodb.core.MongoTemplate mongoTemplate = (org.springframework.data.mongodb.core.MongoTemplate) org.springframework.beans.factory.BeanFactoryUtils.beanOfTypeIncludingAncestors(
+                        org.springframework.web.context.ContextLoader.getCurrentWebApplicationContext(),
+                        org.springframework.data.mongodb.core.MongoTemplate.class
+                    );
+                    dbName = mongoTemplate.getDb().getName();
+                    collectionName = mongoTemplate.getCollectionName(com.beauty.api.collection.User.class);
+                } catch (Exception e) {
+                    System.out.println("[DEBUG] Could not fetch MongoDB info: " + e.getMessage());
+                }
+                System.out.println("[DEBUG] Database: " + dbName);
+                System.out.println("[DEBUG] Collection: " + collectionName);
+                // DEBUG LOGGING END
         if (request.getUsername() == null || request.getPassword() == null) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST)
                 .body(Map.of("message", "Username and password are required"));
@@ -56,14 +72,21 @@ public class AuthController {
         try {
             Optional<User> userOpt = userRepository.findByUsername(request.getUsername());
 
+            System.out.println("[DEBUG] Query username: " + request.getUsername());
             if (userOpt.isEmpty()) {
+                System.out.println("[DEBUG] No user found for username: " + request.getUsername());
                 return ResponseEntity.status(HttpStatus.NOT_FOUND)
                         .body(Map.of("message", "User not found"));
             }
 
             User user = userOpt.get();
+            System.out.println("[DEBUG] User document: " + user);
+            System.out.println("[DEBUG] Entered password: '" + request.getPassword() + "'");
+            System.out.println("[DEBUG] DB password:     '" + user.getPassword() + "'");
+            boolean match = user.getPassword().equals(request.getPassword());
+            System.out.println("[DEBUG] Password match: " + match);
 
-            if (!user.getPassword().equals(request.getPassword())) {
+            if (!match) {
                 return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
                         .body(Map.of("message", "Password incorrect"));
             }
@@ -80,11 +103,14 @@ public class AuthController {
             return ResponseEntity.ok(response);
         } catch (org.springframework.data.mongodb.UncategorizedMongoDbException e) {
             // Database not found
+            System.out.println("[DEBUG] Database not found error: " + e.getMessage());
             return ResponseEntity.status(402).body(Map.of("message", "Database not found"));
         } catch (org.springframework.data.mongodb.core.MongoTemplate.NoSuchCollectionException e) {
             // Collection not found
+            System.out.println("[DEBUG] Collection not found error: " + e.getMessage());
             return ResponseEntity.status(403).body(Map.of("message", "Collection not found"));
         } catch (Exception e) {
+            System.out.println("[DEBUG] Internal server error: " + e.getMessage());
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(Map.of("message", "Internal server error"));
         }
 
