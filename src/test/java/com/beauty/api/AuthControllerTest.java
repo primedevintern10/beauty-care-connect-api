@@ -54,13 +54,13 @@ public class AuthControllerTest {
         when(userDetailsService.loadUserByUsername(anyString())).thenReturn(userDetails);
         when(userService.getUserIdByUsername(anyString())).thenReturn("userId");
         when(jwtHelper.generateToken(userDetails)).thenReturn("token");
+    ResponseEntity<?> responseEntity = authController.login(jwtRequest);
 
-        ResponseEntity<JwtResponse> responseEntity = authController.login(jwtRequest);
-
-        assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
-        assertEquals("username", responseEntity.getBody().getUsername());
-        assertEquals("userId", responseEntity.getBody().get_id());
-        assertEquals("token", responseEntity.getBody().getJwtToken());
+    assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
+    JwtResponse body = (JwtResponse) responseEntity.getBody();
+    assertEquals("username", body.getUsername());
+    assertEquals("userId", body.get_id());
+    assertEquals("token", body.getJwtToken());
     }
 
 }
